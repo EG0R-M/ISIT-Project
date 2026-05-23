@@ -4,6 +4,11 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
 
+
+
+
+
+
 # Импортируем все модели для создания таблиц
 from .user import User
 from .venue import Venue
