@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{ event.title }}</h1>
+        <p><strong>Категория:</strong> {{ event.category }}</p>
+        <p><strong>Описание:</strong> {{ event.description }}</p>
+        <p><strong>Возрастное ограничение:</strong> {{ event.age_restriction }}+</p>
+        <p><strong>Длительность:</strong> {{ event.duration_minutes }} мин.</p>
+        <hr>
+        <h3>Доступные сеансы</h3>
+        {% if sessions %}
+            <ul class="list-group">
+                {% for s in sessions %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ s.start_time.strftime('%d.%m.%Y %H:%M') }} — {{ s.end_time.strftime('%H:%M') }}
+                        <span class="badge bg-primary rounded-pill">{{ s.base_price }} руб.</span>
+                        <a href="{{ url_for('bookings.select_seats', session_id=s.id) }}" class="btn btn-sm btn-success">Выбрать места</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Ближайших сеансов нет.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

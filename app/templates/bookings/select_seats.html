@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Выбор мест{% endblock %}
+{% block content %}
+<h2>Выбор мест на {{ session.event.title }} ({{ session.start_time.strftime('%d.%m.%Y %H:%M') }})</h2>
+<form method="POST">
+    <div class="row">
+        {% for seat in seats %}
+            <div class="col-auto mb-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="seat_ids" value="{{ seat.id }}" id="seat{{ seat.id }}" {% if seat.id in taken_ids %}disabled{% endif %}>
+                    <label class="form-check-label" for="seat{{ seat.id }}">
+                        Ряд {{ seat.row_number }}, место {{ seat.seat_number }} ({{ seat.seat_type }})
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Забронировать выбранные места</button>
+</form>
+{% endblock %}

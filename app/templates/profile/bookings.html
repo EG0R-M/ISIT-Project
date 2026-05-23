@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Мои билеты{% endblock %}
+{% block content %}
+<h1>Мои бронирования</h1>
+<table class="table table-striped">
+    <thead>
+        <tr><th>Мероприятие</th><th>Дата/Время</th><th>Место</th><th>Цена</th><th>Статус</th><th>Действие</th></tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.event.title }}</td>
+                <td>{{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>Ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</td>
+                <td>{{ ticket.price_paid }} руб.</td>
+                <td>{{ ticket.status }}</td>
+                <td>
+                    {% if ticket.status == 'pending' %}
+                        <a href="{{ url_for('bookings.cancel', ticket_id=ticket.id) }}" class="btn btn-sm btn-danger">Отменить</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">У вас пока нет билетов.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
