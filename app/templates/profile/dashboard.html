@@ -6,4 +6,5 @@
 <p><strong>Email:</strong> {{ user.email }}</p>
 <p><strong>Телефон:</strong> {{ user.phone or 'не указан' }}</p>
 <a href="{{ url_for('profile.bookings') }}" class="btn btn-primary">Мои билеты</a>
+<a href="{{ url_for('profile.my_reviews') }}" class="btn btn-info mb-2">📝 Мои отзывы</a>
 {% endblock %}
