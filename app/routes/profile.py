@@ -6,6 +6,7 @@ from moduls.ticket import Ticket
 from moduls.session import Session
 from moduls.event import Event
 from moduls.seat import Seat
+from moduls.review import Review
 
 bp = Blueprint('profile', __name__)
 
@@ -32,37 +33,31 @@ def edit():
     db = get_db()
     
     if request.method == 'POST':
-        # Обновляем основные данные
         full_name = request.form.get('full_name')
         phone = request.form.get('phone')
         
         if full_name:
             current_user.full_name = full_name
-        if phone is not None:  # позволяет сохранить пустую строку
+        if phone is not None:
             current_user.phone = phone
         
-        # Проверка смены пароля
         current_password = request.form.get('current_password')
         new_password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_password')
         
         if current_password and new_password and confirm_password:
-            # Проверяем текущий пароль
             if not check_password_hash(current_user.password_hash, current_password):
                 flash('Текущий пароль введён неверно.', 'danger')
                 return render_template('profile/edit.html', user=current_user)
             
-            # Проверяем, что новый пароль совпадает с подтверждением
             if new_password != confirm_password:
                 flash('Новый пароль и подтверждение не совпадают.', 'danger')
                 return render_template('profile/edit.html', user=current_user)
             
-            # Проверяем минимальную длину пароля
             if len(new_password) < 6:
                 flash('Новый пароль должен содержать не менее 6 символов.', 'danger')
                 return render_template('profile/edit.html', user=current_user)
             
-            # Обновляем пароль
             current_user.password_hash = generate_password_hash(new_password)
             flash('Пароль успешно изменён!', 'success')
         
@@ -75,3 +70,43 @@ def edit():
         return redirect(url_for('profile.dashboard'))
     
     return render_template('profile/edit.html', user=current_user)
+
+@bp.route('/reviews')
+@login_required
+def my_reviews():
+    db = get_db()
+    reviews = db.query(Review).filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
+    for review in reviews:
+        review.event = db.query(Event).get(review.event_id)
+    return render_template('profile/my_reviews.html', reviews=reviews)
+
+@bp.route('/review/delete/<int:review_id>')
+@login_required
+def delete_review(review_id):
+    db = get_db()
+    review = db.query(Review).get(review_id)
+    if not review or review.user_id != current_user.id:
+        flash('Отзыв не найден.', 'danger')
+        return redirect(url_for('profile.my_reviews'))
+    db.delete(review)
+    db.commit()
+    flash('Отзыв удалён.', 'success')
+    return redirect(url_for('profile.my_reviews'))
+
+@bp.route('/review/edit/<int:review_id>', methods=['GET', 'POST'])
+@login_required
+def edit_review(review_id):
+    db = get_db()
+    review = db.query(Review).get(review_id)
+    if not review or review.user_id != current_user.id:
+        flash('Отзыв не найден.', 'danger')
+        return redirect(url_for('profile.my_reviews'))
+    
+    if request.method == 'POST':
+        review.rating = int(request.form['rating'])
+        review.comment = request.form['comment']
+        db.commit()
+        flash('Отзыв обновлён.', 'success')
+        return redirect(url_for('profile.my_reviews'))
+    
+    return render_template('profile/edit_review.html', review=review)

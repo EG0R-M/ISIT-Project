@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Мои отзывы{% endblock %}
+{% block content %}
+<h2>Мои отзывы</h2>
+{% if reviews %}
+    <div class="list-group">
+        {% for review in reviews %}
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h5 class="mb-1">{{ review.event.title }}</h5>
+                    <p>Оценка: 
+                        {% for i in range(5) %}
+                            {% if i < review.rating %}⭐{% else %}☆{% endif %}
+                        {% endfor %}
+                    </p>
+                    <p>{{ review.comment }}</p>
+                    <small class="text-muted">{{ review.created_at.strftime('%d.%m.%Y') }}</small>
+                </div>
+                <div>
+                    <a href="{{ url_for('profile.edit_review', review_id=review.id) }}" class="btn btn-sm btn-primary">✏️ Редактировать</a>
+                    <a href="{{ url_for('profile.delete_review', review_id=review.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить отзыв?')">🗑️ Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>У вас пока нет отзывов.</p>
+{% endif %}
+<a href="{{ url_for('profile.dashboard') }}" class="btn btn-secondary mt-3">Назад в профиль</a>
+{% endblock %}

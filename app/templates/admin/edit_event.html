@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование мероприятия{% endblock %}
+{% block content %}
+<h2>Редактирование мероприятия: {{ event.title }}</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Название *</label>
+        <input type="text" name="title" class="form-control" value="{{ event.title }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <textarea name="description" class="form-control" rows="5">{{ event.description or '' }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Категория *</label>
+        <select name="category" class="form-select" required>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if event.category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Площадка *</label>
+        <select name="venue_id" class="form-select" required>
+            {% for venue in venues %}
+            <option value="{{ venue.id }}" {% if event.venue_id == venue.id %}selected{% endif %}>
+                {{ venue.name }} ({{ venue.city }})
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Длительность (минуты)</label>
+        <input type="number" name="duration_minutes" class="form-control" value="{{ event.duration_minutes or 90 }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Возрастное ограничение</label>
+        <select name="age_restriction" class="form-select">
+            <option value="0" {% if event.age_restriction == 0 %}selected{% endif %}>0+</option>
+            <option value="6" {% if event.age_restriction == 6 %}selected{% endif %}>6+</option>
+            <option value="12" {% if event.age_restriction == 12 %}selected{% endif %}>12+</option>
+            <option value="16" {% if event.age_restriction == 16 %}selected{% endif %}>16+</option>
+            <option value="18" {% if event.age_restriction == 18 %}selected{% endif %}>18+</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">URL постера</label>
+        <input type="url" name="poster_url" class="form-control" value="{{ event.poster_url or '' }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    <a href="{{ url_for('admin.events') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

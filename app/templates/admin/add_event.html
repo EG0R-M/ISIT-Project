@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Добавление мероприятия{% endblock %}
+{% block content %}
+<h2>Добавление мероприятия</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Название *</label>
+        <input type="text" name="title" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <textarea name="description" class="form-control" rows="5"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Категория *</label>
+        <select name="category" class="form-select" required>
+            {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Площадка *</label>
+        <select name="venue_id" class="form-select" required>
+            {% for venue in venues %}
+            <option value="{{ venue.id }}">{{ venue.name }} ({{ venue.city }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Длительность (минуты)</label>
+        <input type="number" name="duration_minutes" class="form-control" value="90">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Возрастное ограничение</label>
+        <select name="age_restriction" class="form-select">
+            <option value="0">0+</option>
+            <option value="6">6+</option>
+            <option value="12">12+</option>
+            <option value="16">16+</option>
+            <option value="18">18+</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">URL постера</label>
+        <input type="url" name="poster_url" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+    <a href="{{ url_for('admin.events') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
