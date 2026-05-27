@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Чек{% endblock %}
+{% block content %}
+<h2>Чек об оплате</h2>
+<p>Номер чека: {{ receipt.receipt_number }}</p>
+<p>Дата: {{ payment.paid_at.strftime('%d.%m.%Y %H:%M') }}</p>
+<p>Событие: {{ ticket.session.event.title }}</p>
+<p>Сумма: {{ payment.amount }} руб.</p>
+<p>Статус: {{ payment.status }}</p>
+<a href="{{ url_for('profile.bookings') }}" class="btn btn-primary">Мои билеты</a>
+{% endblock %}

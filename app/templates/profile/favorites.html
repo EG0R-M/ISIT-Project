@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Избранное{% endblock %}
+{% block content %}
+<h2>Избранные мероприятия</h2>
+<div class="row">
+    {% for event in events %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ event.title }}</h5>
+                <p class="card-text">{{ event.description[:100] }}...</p>
+                <a href="{{ url_for('events.detail', event_id=event.id) }}" class="btn btn-primary">Подробнее</a>
+                <a href="{{ url_for('favorites.remove', event_id=event.id) }}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>Нет избранных мероприятий.</p>
+    {% endfor %}
+</div>
+{% endblock %}

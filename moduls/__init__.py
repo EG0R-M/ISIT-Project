@@ -19,7 +19,7 @@ from .ticket import Ticket
 from .payment import Payment
 from .receipt import Receipt
 from .review import Review
-
+from .favorite import Favorite
 # Функция для подключения к БД
 def init_db(database_url="sqlite:///booking.db"):
     engine = create_engine(database_url, echo=True)

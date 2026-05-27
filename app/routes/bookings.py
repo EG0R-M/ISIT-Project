@@ -69,3 +69,49 @@ def cancel(ticket_id):
         db.commit()
         flash('Бронирование отменено.', 'info')
     return redirect(url_for('profile.bookings'))
+
+@bp.route('/pay/<int:ticket_id>', methods=['GET', 'POST'])
+@login_required
+def pay(ticket_id):
+    db = get_db()
+    ticket = db.query(Ticket).get(ticket_id)
+    if not ticket or ticket.user_id != current_user.id:
+        flash('Билет не найден.', 'danger')
+        return redirect(url_for('profile.bookings'))
+    if ticket.status == 'paid':
+        flash('Билет уже оплачен.', 'info')
+        return redirect(url_for('profile.bookings'))
+    if request.method == 'POST':
+        # Имитация оплаты
+        from datetime import datetime
+        ticket.status = 'paid'
+        # Создаём запись платежа и чека
+        from moduls.payment import Payment
+        from moduls.receipt import Receipt
+        import random, string
+        payment = Payment(ticket_id=ticket.id, amount=ticket.price_paid, status='succeeded', 
+                          payment_method='card', paid_at=datetime.now())
+        db.add(payment)
+        db.flush()
+        receipt_number = 'RCP-' + ''.join(random.choices(string.digits, k=10))
+        receipt = Receipt(payment_id=payment.id, receipt_number=receipt_number, sent_to_email=False)
+        db.add(receipt)
+        db.commit()
+        flash('Оплата прошла успешно! Чек сгенерирован.', 'success')
+        return redirect(url_for('bookings.receipt', ticket_id=ticket.id))
+    return render_template('payment/payment.html', ticket=ticket)
+
+@bp.route('/receipt/<int:ticket_id>')
+@login_required
+def receipt(ticket_id):
+    db = get_db()
+    ticket = db.query(Ticket).get(ticket_id)
+    if not ticket or ticket.user_id != current_user.id:
+        flash('Чек не найден.', 'danger')
+        return redirect(url_for('profile.bookings'))
+    payment = db.query(Payment).filter_by(ticket_id=ticket.id).first()
+    if not payment:
+        flash('Платёж не найден.', 'danger')
+        return redirect(url_for('profile.bookings'))
+    receipt = db.query(Receipt).filter_by(payment_id=payment.id).first()
+    return render_template('payment/receipt.html', ticket=ticket, payment=payment, receipt=receipt)

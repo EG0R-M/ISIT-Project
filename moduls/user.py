@@ -20,6 +20,7 @@ class User(UserMixin, Base):
     # Связи (оставляем как есть, но для корректной работы с Flask-Login они не обязательны)
     tickets = relationship("Ticket", back_populates="user", cascade="all, delete-orphan")
     reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")
+    favorites = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email}, role={self.role})>"

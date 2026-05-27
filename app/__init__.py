@@ -3,22 +3,19 @@ from flask_login import LoginManager
 from config import Config
 from app.database import close_db
 
-# Глобальная переменная для login_manager (чтобы избежать цикличных импортов)
 login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Инициализация LoginManager
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Пожалуйста, войдите для доступа.'
 
-    # Регистрация teardown для закрытия сессии
     app.teardown_appcontext(close_db)
 
-    # Импорт моделей и функции user_loader (после инициализации app)
+    # Импорт моделей и user_loader
     from moduls.user import User
     from app.database import get_db
 
@@ -27,13 +24,16 @@ def create_app():
         db = get_db()
         return db.query(User).get(int(user_id))
 
-    # Регистрация blueprints
-    from app.routes import auth, events, bookings, profile, admin
+    # Регистрация всех blueprint'ов
+    from app.routes import auth, events, bookings, profile, admin, favorites, api
+    
     app.register_blueprint(auth.bp, url_prefix='/auth')
     app.register_blueprint(events.bp, url_prefix='/events')
     app.register_blueprint(bookings.bp, url_prefix='/bookings')
     app.register_blueprint(profile.bp, url_prefix='/profile')
     app.register_blueprint(admin.bp, url_prefix='/admin')
+    app.register_blueprint(favorites.bp)  # у него уже есть url_prefix='/favorites' в самом blueprint
+    app.register_blueprint(api.bp)        # у него уже есть url_prefix='/api' в самом blueprint
 
     @app.route('/')
     def index():

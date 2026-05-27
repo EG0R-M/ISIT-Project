@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Оплата билета{% endblock %}
+{% block content %}
+<h2>Оплата билета</h2>
+<p>Событие: {{ ticket.session.event.title }}</p>
+<p>Сеанс: {{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+<p>Место: ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</p>
+<p>Сумма: {{ ticket.price_paid }} руб.</p>
+<form method="POST">
+    <div class="alert alert-info">Тестовая оплата: введите любые данные</div>
+    <button type="submit" class="btn btn-success">Оплатить</button>
+</form>
+{% endblock %}

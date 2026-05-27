@@ -21,6 +21,7 @@ class Event(Base):
     venue = relationship("Venue", back_populates="events")
     sessions = relationship("Session", back_populates="event", cascade="all, delete-orphan")
     reviews = relationship("Review", back_populates="event", cascade="all, delete-orphan")
+    favorited_by = relationship("Favorite", back_populates="event", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Event(id={self.id}, title={self.title}, category={self.category})>"

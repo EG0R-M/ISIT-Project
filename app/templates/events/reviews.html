@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Отзывы на {{ event.title }}{% endblock %}
+{% block content %}
+<h2>Отзывы на событие "{{ event.title }}"</h2>
+{% if current_user.is_authenticated %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Оставить отзыв</h5>
+        <form method="POST">
+            <div class="mb-3">
+                <label>Оценка (1-5)</label>
+                <select name="rating" class="form-select">
+                    <option value="5">5 - Отлично</option>
+                    <option value="4">4 - Хорошо</option>
+                    <option value="3">3 - Средне</option>
+                    <option value="2">2 - Плохо</option>
+                    <option value="1">1 - Ужасно</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Комментарий</label>
+                <textarea name="comment" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+<div class="list-group">
+    {% for review in reviews %}
+    <div class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <strong>{{ review.user.full_name }}</strong>
+            <span>Оценка: {{ review.rating }}/5</span>
+        </div>
+        <p>{{ review.comment }}</p>
+        <small class="text-muted">{{ review.created_at.strftime('%d.%m.%Y') }}</small>
+    </div>
+    {% else %}
+    <p>Пока нет отзывов. Будьте первым!</p>
+    {% endfor %}
+</div>
+{% endblock %}
