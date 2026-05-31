@@ -8,21 +8,35 @@
     </thead>
     <tbody>
         {% for ticket in tickets %}
-            <tr>
-                <td>{{ ticket.event.title }}</td>
-                <td>{{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
-                <td>Ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</td>
-                <td>{{ ticket.price_paid }} руб.</td>
-                <td>{{ ticket.status }}</td>
-                <td>
-                    {% if ticket.status == 'pending' %}
-                        <a href="{{ url_for('bookings.cancel', ticket_id=ticket.id) }}" class="btn btn-sm btn-danger">Отменить</a>
-                    {% endif %}
-                </td>
-            </tr>
+        <tr>
+            <td>{{ ticket.event.title }}</td>
+            <td>{{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>Ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</td>
+            <td>{{ ticket.price_paid }} руб.</td>
+            <td>
+                {% if ticket.status == 'pending' %}
+                    <span class="badge bg-warning">Ожидает оплаты</span>
+                {% elif ticket.status == 'paid' %}
+                    <span class="badge bg-success">Оплачен</span>
+                {% elif ticket.status == 'cancelled' %}
+                    <span class="badge bg-danger">Отменён</span>
+                {% else %}
+                    {{ ticket.status }}
+                {% endif %}
+            </td>
+            <td>
+                {% if ticket.status == 'pending' %}
+                    <a href="{{ url_for('bookings.pay', ticket_id=ticket.id) }}" class="btn btn-sm btn-success">Оплатить</a>
+                    <a href="{{ url_for('bookings.cancel', ticket_id=ticket.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Отменить бронирование?')">Отменить</a>
+                {% elif ticket.status == 'paid' %}
+                    <a href="{{ url_for('bookings.receipt', ticket_id=ticket.id) }}" class="btn btn-sm btn-info">Чек</a>
+                {% endif %}
+            </td>
+        </tr>
         {% else %}
-            <tr><td colspan="6">У вас пока нет билетов.</td></tr>
+        <tr><td colspan="6">У вас пока нет билетов.</td></tr>
         {% endfor %}
     </tbody>
 </table>
+<a href="{{ url_for('profile.dashboard') }}" class="btn btn-secondary">Назад в профиль</a>
 {% endblock %}

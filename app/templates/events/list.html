@@ -7,8 +7,8 @@
         <div class="col-auto">
             <select name="category" class="form-select">
                 <option value="">Все категории</option>
-                {% for cat in categories %}
-                    <option value="{{ cat }}" {% if selected == cat %}selected{% endif %}>{{ cat }}</option>
+                {% for code, name in categories %}
+                    <option value="{{ code }}" {% if selected == code %}selected{% endif %}>{{ name }}</option>
                 {% endfor %}
             </select>
         </div>

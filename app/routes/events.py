@@ -35,7 +35,13 @@ def list_events():
     prev_num = page - 1 if has_prev else None
     next_num = page + 1 if has_next else None
     
-    categories = ['movie', 'theater', 'concert', 'sport', 'exhibition']
+    categories = [
+    ('movie', 'Кино'),
+    ('theater', 'Театр'),
+    ('concert', 'Концерт'),
+    ('sport', 'Спорт'),
+    ('exhibition', 'Выставка')
+    ]
     
     # Создаём объект, похожий на pagination для шаблона
     pagination = {
@@ -70,8 +76,27 @@ def detail(event_id):
     if not event:
         return "Событие не найдено", 404
     sessions = db.query(Session).filter_by(event_id=event_id, is_cancelled=False).order_by(Session.start_time).all()
-    return render_template('events/detail.html', event=event, sessions=sessions)
-
+    
+    # Получаем отзывы для этого события (последние 10)
+    reviews = db.query(Review).filter_by(event_id=event_id).order_by(Review.created_at.desc()).limit(10).all()
+    
+    # Проверяем, может ли текущий пользователь оставить отзыв
+    user_can_review = False
+    if current_user.is_authenticated:
+        # Есть ли оплаченный билет на прошедший сеанс этого события?
+        now = datetime.now()
+        user_can_review = db.query(Ticket).filter(
+            Ticket.user_id == current_user.id,
+            Ticket.session.has(event_id=event_id),
+            Ticket.status == 'paid',
+            Ticket.session.has(Session.start_time < now)
+        ).first() is not None
+    
+    return render_template('events/detail.html', 
+                          event=event, 
+                          sessions=sessions,
+                          reviews=reviews,
+                          user_can_review=user_can_review)
 @bp.route('/search')
 def search():
     db = get_db()

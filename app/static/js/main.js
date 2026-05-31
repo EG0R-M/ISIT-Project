@@ -127,3 +127,22 @@ function selectAllInRow(rowId) {
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
     checkboxes.forEach(cb => cb.checked = !allChecked);
 }
+
+// Подсчёт выбранных мест на странице выбора мест
+document.addEventListener('DOMContentLoaded', function() {
+    const seatForm = document.getElementById('seat-form');
+    if (seatForm) {
+        const checkboxes = seatForm.querySelectorAll('.seat-checkbox');
+        const submitBtn = seatForm.querySelector('button[type="submit"]');
+        
+        function updateCount() {
+            const checked = seatForm.querySelectorAll('.seat-checkbox:checked').length;
+            if (submitBtn) {
+                submitBtn.textContent = `Забронировать выбранные места (${checked})`;
+            }
+        }
+        
+        checkboxes.forEach(cb => cb.addEventListener('change', updateCount));
+        updateCount();
+    }
+});

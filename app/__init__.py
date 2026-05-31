@@ -32,8 +32,17 @@ def create_app():
     app.register_blueprint(bookings.bp, url_prefix='/bookings')
     app.register_blueprint(profile.bp, url_prefix='/profile')
     app.register_blueprint(admin.bp, url_prefix='/admin')
-    app.register_blueprint(favorites.bp)  # у него уже есть url_prefix='/favorites' в самом blueprint
-    app.register_blueprint(api.bp)        # у него уже есть url_prefix='/api' в самом blueprint
+    app.register_blueprint(favorites.bp) 
+    app.register_blueprint(api.bp)        
+
+    from app.routes.weather import bp as weather_bp
+    app.register_blueprint(weather_bp)
+
+    from app.routes.api_venues import api_venues_bp
+    app.register_blueprint(api_venues_bp)
+
+    from app.routes import venues
+    app.register_blueprint(venues.bp)
 
     @app.route('/')
     def index():

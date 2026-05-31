@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ venue.name }}{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h1>{{ venue.name }}</h1>
+    <p><strong>Адрес:</strong> {{ venue.address }}</p>
+    <p><strong>Город:</strong> {{ venue.city }}</p>
+    <p><strong>Вместимость:</strong> {{ venue.total_seats }} мест</p>
+</div>
+
+<h3>Мероприятия в этом заведении</h3>
+{% if events %}
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if event.poster_url %}
+                <img src="{{ event.poster_url }}" class="card-img-top" alt="{{ event.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <p class="card-text">{{ event.description|truncate(100) }}</p>
+                    <p><strong>Категория:</strong> 
+                        {{ {'movie':'Кино','theater':'Театр','concert':'Концерт','sport':'Спорт','exhibition':'Выставка'}[event.category] }}
+                    </p>
+                    {% if event.next_session %}
+                        <p><strong>Ближайший сеанс:</strong> {{ event.next_session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+                        <p><strong>Цена от:</strong> {{ event.next_session.base_price }} руб.</p>
+                    {% else %}
+                        <p class="text-muted">Нет ближайших сеансов</p>
+                    {% endif %}
+                    <a href="{{ url_for('events.detail', event_id=event.id) }}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Пока нет мероприятий в этом заведении.</p>
+{% endif %}
+
+<a href="{{ url_for('venues.list_venues') }}" class="btn btn-secondary">← Назад к списку заведений</a>
+{% endblock %}

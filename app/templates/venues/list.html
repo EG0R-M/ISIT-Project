@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Все заведения{% endblock %}
+{% block content %}
+<h1>Все заведения</h1>
+<div class="row">
+    {% for venue in venues %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ venue.name }}</h5>
+                <p class="card-text">{{ venue.city }}, {{ venue.address }}</p>
+                <a href="/venues/{{ venue.id }}" class="btn btn-sm btn-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

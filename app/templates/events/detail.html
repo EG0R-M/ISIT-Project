@@ -25,4 +25,56 @@
         {% endif %}
     </div>
 </div>
+<hr>
+<h3>Отзывы</h3>
+
+{% if current_user.is_authenticated %}
+    {% if user_can_review %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Оставить отзыв</h5>
+            <form method="POST" action="{{ url_for('events.reviews', event_id=event.id) }}">
+                <div class="mb-3">
+                    <label class="form-label">Оценка (1-5)</label>
+                    <select name="rating" class="form-select">
+                        <option value="5">5 – Отлично</option>
+                        <option value="4">4 – Хорошо</option>
+                        <option value="3">3 – Средне</option>
+                        <option value="2">2 – Плохо</option>
+                        <option value="1">1 – Ужасно</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Комментарий</label>
+                    <textarea name="comment" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+            </form>
+        </div>
+    </div>
+    {% elif current_user.is_authenticated %}
+        <div class="alert alert-info">
+            Вы можете оставить отзыв только после покупки билета и посещения мероприятия.
+        </div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-secondary">
+        <a href="{{ url_for('auth.login') }}">Войдите</a>, чтобы оставить отзыв.
+    </div>
+{% endif %}
+
+<div class="list-group mt-3">
+    {% for review in reviews %}
+    <div class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <strong>{{ review.user.full_name }}</strong>
+            <span>Оценка: {{ review.rating }}/5</span>
+        </div>
+        <p class="mt-2">{{ review.comment }}</p>
+        <small class="text-muted">{{ review.created_at.strftime('%d.%m.%Y') }}</small>
+    </div>
+    {% else %}
+    <p>Пока нет отзывов. Будьте первым!</p>
+    {% endfor %}
+</div>
 {% endblock %}

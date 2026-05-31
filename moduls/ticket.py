@@ -14,6 +14,7 @@ class Ticket(Base):
     status = Column(String(50), default="pending")  # pending / paid / cancelled / expired
     booking_expires_at = Column(DateTime)
     qr_code = Column(String(500))
+    paid_at = Column(DateTime, nullable=True)
     
     created_at = Column(DateTime, server_default=func.now())
     

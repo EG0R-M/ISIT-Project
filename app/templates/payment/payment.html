@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Оплата билета{% endblock %}
 {% block content %}
-<h2>Оплата билета</h2>
-<p>Событие: {{ ticket.session.event.title }}</p>
-<p>Сеанс: {{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
-<p>Место: ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</p>
-<p>Сумма: {{ ticket.price_paid }} руб.</p>
-<form method="POST">
-    <div class="alert alert-info">Тестовая оплата: введите любые данные</div>
-    <button type="submit" class="btn btn-success">Оплатить</button>
-</form>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>Оплата билета</h2>
+        <p><strong>Мероприятие:</strong> {{ ticket.event.title }}</p>
+        <p><strong>Дата и время:</strong> {{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+        <p><strong>Место:</strong> ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</p>
+        <p><strong>Сумма:</strong> {{ ticket.price_paid }} руб.</p>
+        <form method="POST">
+            <div class="alert alert-info">Тестовый режим оплаты</div>
+            <button type="submit" class="btn btn-success">Оплатить</button>
+            <a href="{{ url_for('profile.bookings') }}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
 {% endblock %}
