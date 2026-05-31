@@ -2,8 +2,19 @@
 {% block title %}{{ event.title }}{% endblock %}
 {% block content %}
 <div class="row">
+    <div class="col-md-4">
+        {% if event.poster_url %}
+            <img src="{{ event.poster_url }}" class="img-fluid rounded" alt="{{ event.title }}">
+        {% else %}
+            <div class="bg-secondary text-white p-5 text-center rounded">
+                <p>🎬 {{ event.category }}</p>
+                <p class="small">Изображение отсутствует</p>
+            </div>
+        {% endif %}
+    </div>
     <div class="col-md-8">
         <h1>{{ event.title }}</h1>
+        <p>{{ event.description }}</p>
         <p><strong>Категория:</strong> {{ event.category }}</p>
         <p><strong>Описание:</strong> {{ event.description }}</p>
         <p><strong>Возрастное ограничение:</strong> {{ event.age_restriction }}+</p>
@@ -24,6 +35,9 @@
             <p>Ближайших сеансов нет.</p>
         {% endif %}
     </div>
+</div>
+<div class="row">
+
 </div>
 <hr>
 <h3>Отзывы</h3>
