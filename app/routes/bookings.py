@@ -13,21 +13,23 @@ import string
 
 bp = Blueprint('bookings', __name__)
 
-
 @bp.route('/select_seats/<int:session_id>', methods=['GET', 'POST'])
 @login_required
 def select_seats(session_id):
     db = get_db()
     session = db.query(Session).get(session_id)
     if not session:
-        return "Сеанс не найден", 404
+        flash('Сеанс не найден', 'danger')
+        return redirect(url_for('events.list_events'))
     
     venue_id = session.event.venue_id
-    # Получаем все места, сортируем по ряду и месту
     seats = db.query(Seat).filter_by(venue_id=venue_id, is_active=True).order_by(Seat.row_number, Seat.seat_number).all()
     
     # Получаем занятые места на этот сеанс
-    taken = db.query(Ticket.seat_id).filter(Ticket.session_id == session_id, Ticket.status.in_(['pending', 'paid'])).all()
+    taken = db.query(Ticket.seat_id).filter(
+        Ticket.session_id == session_id, 
+        Ticket.status.in_(['pending', 'paid'])
+    ).all()
     taken_ids = {t[0] for t in taken}
     
     # Группируем места по рядам
@@ -36,15 +38,43 @@ def select_seats(session_id):
         if seat.row_number not in rows:
             rows[seat.row_number] = []
         rows[seat.row_number].append(seat)
+    max_seats_per_row = max(len(s) for s in rows.values()) if rows else 0
     
-    # Находим максимальное количество мест в ряду (для таблицы)
-    max_seats_in_row = max(len(seats_in_row) for seats_in_row in rows.values()) if rows else 0
+    if request.method == 'POST':
+        selected_seat_ids = request.form.getlist('seat_ids')
+        
+        if not selected_seat_ids:
+            flash('Выберите хотя бы одно место.', 'warning')
+            return redirect(url_for('bookings.select_seats', session_id=session_id))
+        
+        # Проверяем, что выбранные места не заняты
+        for seat_id in selected_seat_ids:
+            seat_id = int(seat_id)
+            if seat_id in taken_ids:
+                flash(f'Место {seat_id} уже занято.', 'danger')
+                return redirect(url_for('bookings.select_seats', session_id=session_id))
+        
+        # Создаём бронирования
+        for seat_id in selected_seat_ids:
+            ticket = Ticket(
+                user_id=current_user.id,
+                session_id=session_id,
+                seat_id=int(seat_id),
+                price_paid=session.base_price,
+                status='pending',
+                booking_expires_at=datetime.now() + timedelta(minutes=15)
+            )
+            db.add(ticket)
+        
+        db.commit()
+        flash('Билеты забронированы! Оплатите в течение 15 минут.', 'success')
+        return redirect(url_for('profile.bookings'))
     
-    return render_template('bookings/select_seats.html',
-                           session=session,
-                           rows=rows,
-                           taken_ids=taken_ids,
-                           max_seats_in_row=max_seats_in_row)
+    return render_template('bookings/select_seats.html', 
+                          session=session, 
+                          rows=rows, 
+                          taken_ids=taken_ids,
+                          max_seats_per_row=max_seats_per_row)
 
 @bp.route('/cancel/<int:ticket_id>')
 @login_required
@@ -71,24 +101,20 @@ def pay(ticket_id):
     if not ticket or ticket.user_id != current_user.id:
         flash('Билет не найден.', 'danger')
         return redirect(url_for('profile.bookings'))
+    
     if ticket.status == 'paid':
         flash('Билет уже оплачен.', 'info')
         return redirect(url_for('profile.bookings'))
     
-    # Подгружаем связанные объекты для отображения
+    # Подгружаем связанные объекты
     ticket.session = db.query(Session).get(ticket.session_id)
     if ticket.session:
         ticket.event = db.query(Event).get(ticket.session.event_id)
     ticket.seat = db.query(Seat).get(ticket.seat_id)
     
     if request.method == 'POST':
-        from datetime import datetime
         ticket.status = 'paid'
         ticket.paid_at = datetime.now()
-        
-        from moduls.payment import Payment
-        from moduls.receipt import Receipt
-        import random, string
         
         payment = Payment(
             ticket_id=ticket.id,
@@ -122,9 +148,18 @@ def receipt(ticket_id):
     if not ticket or ticket.user_id != current_user.id:
         flash('Чек не найден.', 'danger')
         return redirect(url_for('profile.bookings'))
+    
     payment = db.query(Payment).filter_by(ticket_id=ticket.id).first()
     if not payment:
         flash('Платёж не найден.', 'danger')
         return redirect(url_for('profile.bookings'))
+    
     receipt = db.query(Receipt).filter_by(payment_id=payment.id).first()
+    
+    # Подгружаем связанные данные
+    ticket.session = db.query(Session).get(ticket.session_id)
+    if ticket.session:
+        ticket.event = db.query(Event).get(ticket.session.event_id)
+    ticket.seat = db.query(Seat).get(ticket.seat_id)
+    
     return render_template('payment/receipt.html', ticket=ticket, payment=payment, receipt=receipt)

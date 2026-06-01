@@ -14,8 +14,9 @@
     </div>
     <div class="col-md-8">
         <h1>{{ event.title }}</h1>
-        <p>{{ event.description }}</p>
-        <p><strong>Категория:</strong> {{ event.category }}</p>
+        <p><strong>Категория:</strong> 
+            {{ {'movie':'Кино','theater':'Театр','concert':'Концерт','sport':'Спорт','exhibition':'Выставка'}[event.category] }}
+        </p>
         <p><strong>Описание:</strong> {{ event.description }}</p>
         <p><strong>Возрастное ограничение:</strong> {{ event.age_restriction }}+</p>
         <p><strong>Длительность:</strong> {{ event.duration_minutes }} мин.</p>
@@ -36,9 +37,7 @@
         {% endif %}
     </div>
 </div>
-<div class="row">
 
-</div>
 <hr>
 <h3>Отзывы</h3>
 

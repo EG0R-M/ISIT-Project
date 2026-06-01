@@ -1,11 +1,12 @@
 from flask import Flask, render_template, jsonify
 import requests
 import random
-
+import os
 app = Flask(__name__)
 
+
 # Вставьте свой API ключ OpenWeatherMap
-API_KEY = "....."  # Замените на свой реальный ключ
+API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
 CITY = "Irkutsk"
 URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric&lang=ru"
 

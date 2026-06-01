@@ -21,45 +21,36 @@ def list_events():
     if category:
         query = query.filter_by(category=category)
     
-    # Подсчёт общего количества
     total = query.count()
-    
-    # Пагинация вручную
     offset = (page - 1) * per_page
     events = query.offset(offset).limit(per_page).all()
     
-    # Расчёт данных для пагинации
-    total_pages = math.ceil(total / per_page)
+    total_pages = math.ceil(total / per_page) if total > 0 else 1
     has_prev = page > 1
     has_next = page < total_pages
-    prev_num = page - 1 if has_prev else None
-    next_num = page + 1 if has_next else None
     
     categories = [
-    ('movie', 'Кино'),
-    ('theater', 'Театр'),
-    ('concert', 'Концерт'),
-    ('sport', 'Спорт'),
-    ('exhibition', 'Выставка')
+        ('movie', 'Кино'),
+        ('theater', 'Театр'),
+        ('concert', 'Концерт'),
+        ('sport', 'Спорт'),
+        ('exhibition', 'Выставка')
     ]
     
-    # Создаём объект, похожий на pagination для шаблона
     pagination = {
         'has_prev': has_prev,
         'has_next': has_next,
-        'prev_num': prev_num,
-        'next_num': next_num,
+        'prev_num': page - 1 if has_prev else None,
+        'next_num': page + 1 if has_next else None,
         'pages': total_pages,
         'page': page,
         'per_page': per_page,
         'total': total
     }
     
-    # Функция для итерации по страницам
     def iter_pages():
         for i in range(1, total_pages + 1):
             yield i
-    
     pagination['iter_pages'] = iter_pages
     
     return render_template('events/list.html', 
@@ -75,6 +66,7 @@ def detail(event_id):
     event = db.query(Event).get(event_id)
     if not event:
         return "Событие не найдено", 404
+    
     sessions = db.query(Session).filter_by(event_id=event_id, is_cancelled=False).order_by(Session.start_time).all()
     
     # Получаем отзывы для этого события (последние 10)
@@ -83,7 +75,6 @@ def detail(event_id):
     # Проверяем, может ли текущий пользователь оставить отзыв
     user_can_review = False
     if current_user.is_authenticated:
-        # Есть ли оплаченный билет на прошедший сеанс этого события?
         now = datetime.now()
         user_can_review = db.query(Ticket).filter(
             Ticket.user_id == current_user.id,
@@ -97,6 +88,7 @@ def detail(event_id):
                           sessions=sessions,
                           reviews=reviews,
                           user_can_review=user_can_review)
+
 @bp.route('/search')
 def search():
     db = get_db()
@@ -115,37 +107,35 @@ def search():
         subq = db.query(Session.event_id).filter(Session.start_time >= date_from).subquery()
         query = query.filter(Event.id.in_(subq))
     
-    # Подсчёт общего количества
     total = query.count()
-    
-    # Пагинация вручную
     offset = (page - 1) * per_page
     events = query.offset(offset).limit(per_page).all()
     
-    # Расчёт данных для пагинации
-    total_pages = math.ceil(total / per_page)
+    total_pages = math.ceil(total / per_page) if total > 0 else 1
     has_prev = page > 1
     has_next = page < total_pages
-    prev_num = page - 1 if has_prev else None
-    next_num = page + 1 if has_next else None
     
-    categories = ['movie', 'theater', 'concert', 'sport', 'exhibition']
+    categories = [
+        ('movie', 'Кино'),
+        ('theater', 'Театр'),
+        ('concert', 'Концерт'),
+        ('sport', 'Спорт'),
+        ('exhibition', 'Выставка')
+    ]
     
     pagination = {
         'has_prev': has_prev,
         'has_next': has_next,
-        'prev_num': prev_num,
-        'next_num': next_num,
+        'prev_num': page - 1 if has_prev else None,
+        'next_num': page + 1 if has_next else None,
         'pages': total_pages,
         'page': page,
-        'per_page': per_page,
         'total': total
     }
     
     def iter_pages():
         for i in range(1, total_pages + 1):
             yield i
-    
     pagination['iter_pages'] = iter_pages
     
     return render_template('events/search.html', 
@@ -165,14 +155,12 @@ def reviews(event_id):
         return "Событие не найдено", 404
     
     if request.method == 'POST' and current_user.is_authenticated:
-        # Проверка: покупал ли пользователь билет на это событие
         has_ticket = db.query(Ticket).filter(
             Ticket.user_id == current_user.id,
             Ticket.session.has(event_id=event_id),
             Ticket.status == 'paid'
         ).first() is not None
         
-        # Проверка: прошло ли мероприятие
         current_time = datetime.now()
         has_passed = db.query(Ticket).filter(
             Ticket.user_id == current_user.id,
