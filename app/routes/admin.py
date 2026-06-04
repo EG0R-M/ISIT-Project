@@ -130,3 +130,57 @@ def toggle_user(user_id):
         status = "разблокирован" if user.is_active else "заблокирован"
         flash(f'Пользователь {user.email} {status}', 'success')
     return redirect(url_for('admin.users'))
+
+from moduls.event import EventStatus   # убедитесь, что импортирован
+
+@bp.route('/events/pending')
+@login_required
+def pending_events():
+    if current_user.role != 'admin':
+        abort(403)
+    db = get_db()
+    # Используйте сравнение с объектом Enum, а не строкой
+    pending = db.query(Event).filter(Event.status == EventStatus.PENDING).order_by(Event.created_at).all()
+    return render_template('admin/pending_events.html', events=pending)
+
+@bp.route('/events/pending/<int:event_id>')
+@login_required
+def view_pending_event(event_id):
+    if current_user.role != 'admin':
+        abort(403)
+    db = get_db()
+    event = db.query(Event).get(event_id)
+    if not event or event.status != EventStatus.PENDING:
+        flash('Мероприятие не найдено или уже обработано.', 'warning')
+        return redirect(url_for('admin.pending_events'))
+    return render_template('admin/event_review.html', event=event)
+
+@bp.route('/events/approve/<int:event_id>')
+@login_required
+def approve_event(event_id):
+    if current_user.role != 'admin':
+        abort(403)
+    db = get_db()
+    event = db.query(Event).get(event_id)
+    if event:
+        event.status = EventStatus.APPROVED   # не 'approved'
+        db.commit()
+        flash(f'Мероприятие "{event.title}" одобрено', 'success')
+    else:
+        flash('Мероприятие не найдено', 'danger')
+    return redirect(url_for('admin.pending_events'))
+
+@bp.route('/events/reject/<int:event_id>')
+@login_required
+def reject_event(event_id):
+    if current_user.role != 'admin':
+        abort(403)
+    db = get_db()
+    event = db.query(Event).get(event_id)
+    if event:
+        event.status = EventStatus.REJECTED   # не 'rejected'
+        db.commit()
+        flash(f'Мероприятие "{event.title}" отклонено', 'warning')
+    else:
+        flash('Мероприятие не найдено', 'danger')
+    return redirect(url_for('admin.pending_events'))

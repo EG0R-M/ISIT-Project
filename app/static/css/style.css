@@ -296,3 +296,37 @@ input[type="tel"]:valid {
     justify-content: center;
     height: 100%;
 }
+/* ========== Виджет погоды в шапке ========== */
+.weather-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 5px 14px !important;
+    margin-left: 10px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.weather-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+.weather-icon {
+    font-size: 1.3rem;
+}
+.weather-temp {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+@media (max-width: 768px) {
+    .weather-nav-link {
+        padding: 5px 8px !important;
+        gap: 4px;
+    }
+    .weather-temp {
+        font-size: 0.8rem;
+    }
+    .weather-icon {
+        font-size: 1rem;
+    }
+}

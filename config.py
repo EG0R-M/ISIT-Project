@@ -1,8 +1,13 @@
 import os
+from dotenv import load_dotenv
+
+# Загружаем .env из корня проекта (явно указываем путь)
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-12345'
- 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///booking.db'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///booking.db')
+    
     OPENWEATHER_API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
-    WEATHER_CITY = 'Irkutsk'
+    WEATHER_CITY = os.environ.get('WEATHER_CITY', 'Irkutsk')

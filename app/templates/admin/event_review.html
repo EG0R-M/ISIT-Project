@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Просмотр мероприятия на модерации{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>Заявка на мероприятие</h3>
+                <p class="text-muted">От пользователя: {{ event.creator.full_name if event.creator else 'Неизвестен' }} ({{ event.creator.email if event.creator else 'неизвестно' }})</p>
+                <p>Дата подачи: {{ event.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+            </div>
+            <div class="card-body">
+                <h4>Информация о месте проведения</h4>
+                <table class="table table-sm">
+                    <tr><th>Название заведения</th><td>{{ event.venue.name }}</td></tr>
+                    <tr><th>Адрес</th><td>{{ event.venue.address or 'Не указан' }}</td></tr>
+                    <tr><th>Город</th><td>{{ event.venue.city }}</td></tr>
+                </table>
+
+                <h4>Информация о мероприятии</h4>
+                <table class="table table-sm">
+                    <tr><th>Название</th><td>{{ event.title }}</td></tr>
+                    <tr><th>Описание</th><td>{{ event.description or 'Отсутствует' }}</td></tr>
+                    <tr><th>Категория</th><td>{{ event.category }}</td></tr>
+                    <tr><th>Длительность (мин)</th><td>{{ event.duration_minutes or 'не указана' }}</td></tr>
+                    <tr><th>Возрастное ограничение</th><td>{{ event.age_restriction }}+</td></tr>
+                    <tr><th>Постер</th><td>
+                        {% if event.poster_url %}
+                            <a href="{{ event.poster_url }}" target="_blank">Ссылка на постер</a>
+                        {% else %}
+                            Не предоставлен
+                        {% endif %}
+                    </td></tr>
+                </table>
+                <h4>Сеансы</h4>
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>Дата и время начала</th><th>Дата и время окончания</th><th>Цена (руб)</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for session in event.sessions %}
+                        <tr>
+                            <td>{{ session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td>{{ session.end_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td>{{ session.base_price }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3">Сеансы не указаны</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ url_for('admin.pending_events') }}" class="btn btn-secondary">← Назад к списку</a>
+                <div>
+                    <a href="{{ url_for('admin.approve_event', event_id=event.id) }}" class="btn btn-success">✅ Одобрить</a>
+                    <a href="{{ url_for('admin.reject_event', event_id=event.id) }}" class="btn btn-danger" onclick="return confirm('Отклонить мероприятие?')">❌ Отклонить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

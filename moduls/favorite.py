@@ -14,4 +14,4 @@ class Favorite(Base):
     )
     
     user = relationship("User", back_populates="favorites")
-    event = relationship("Event", back_populates="favorited_by")
+    event = relationship("Event", back_populates="favorited_by")   # связь с событием

@@ -130,7 +130,6 @@ h1 {
     background: #fff;
     width: 100px;
     height: 80px;
-    position: absolute;
     top: -15px;
     left: 10px;
     border-radius: 100px;
@@ -145,111 +144,36 @@ h1 {
     right: 15px;
 }
 
-.x1 {
-    left: -200px;
-    animation: moveclouds 30s linear infinite;
-}
-
-.x2 {
-    left: -300px;
-    top: 100px;
-    transform: scale(0.6);
-    opacity: 0.6;
-    animation: moveclouds 50s linear infinite;
-}
-
-.x3 {
-    left: -150px;
-    top: 200px;
-    transform: scale(0.8);
-    opacity: 0.8;
-    animation: moveclouds 40s linear infinite;
-}
-
-.x4 {
-    left: -400px;
-    top: 300px;
-    transform: scale(0.75);
-    opacity: 0.75;
-    animation: moveclouds 36s linear infinite;
-}
-
-.x5 {
-    left: -250px;
-    top: -50px;
-    transform: scale(0.5);
-    opacity: 0.5;
-    animation: moveclouds 44s linear infinite;
-}
-
-.x6 {
-    left: -100px;
-    top: 400px;
-    transform: scale(0.7);
-    opacity: 0.7;
-    animation: moveclouds 52s linear infinite;
-}
-
-.x7 {
-    left: -350px;
-    top: 500px;
-    transform: scale(0.55);
-    opacity: 0.55;
-    animation: moveclouds 38s linear infinite;
-}
-
-.x8 {
-    left: -180px;
-    top: -100px;
-    transform: scale(0.65);
-    opacity: 0.65;
-    animation: moveclouds 46s linear infinite;
-}
-
-.x9 {
-    left: -280px;
-    top: 600px;
-    transform: scale(0.45);
-    opacity: 0.45;
-    animation: moveclouds 48s linear infinite;
-}
-
-.x10 {
-    left: -50px;
-    top: 150px;
-    transform: scale(0.85);
-    opacity: 0.85;
-    animation: moveclouds 34s linear infinite;
-}
+.x1 { left: -200px; animation: moveclouds 30s linear infinite; }
+.x2 { left: -300px; top: 100px; transform: scale(0.6); opacity: 0.6; animation: moveclouds 50s linear infinite; }
+.x3 { left: -150px; top: 200px; transform: scale(0.8); opacity: 0.8; animation: moveclouds 40s linear infinite; }
+.x4 { left: -400px; top: 300px; transform: scale(0.75); opacity: 0.75; animation: moveclouds 36s linear infinite; }
+.x5 { left: -250px; top: -50px; transform: scale(0.5); opacity: 0.5; animation: moveclouds 44s linear infinite; }
+.x6 { left: -100px; top: 400px; transform: scale(0.7); opacity: 0.7; animation: moveclouds 52s linear infinite; }
+.x7 { left: -350px; top: 500px; transform: scale(0.55); opacity: 0.55; animation: moveclouds 38s linear infinite; }
+.x8 { left: -180px; top: -100px; transform: scale(0.65); opacity: 0.65; animation: moveclouds 46s linear infinite; }
+.x9 { left: -280px; top: 600px; transform: scale(0.45); opacity: 0.45; animation: moveclouds 48s linear infinite; }
+.x10 { left: -50px; top: 150px; transform: scale(0.85); opacity: 0.85; animation: moveclouds 34s linear infinite; }
 
 @keyframes moveclouds {
-    0% {
-        margin-left: 100%;
-    }
-    100% {
-        margin-left: -200%;
-    }
+    0% { margin-left: 100%; }
+    100% { margin-left: -200%; }
 }
 
-/* Адаптивность */
 @media (max-width: 600px) {
     .weather-card {
         padding: 25px 30px;
         margin: 15px;
     }
-    
     .temperature {
         font-size: 48px;
     }
-    
     .weather-type {
         font-size: 32px;
     }
-    
     h1 {
         font-size: 22px;
     }
-    
     .advice-text {
         font-size: 14px;
     }

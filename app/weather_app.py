@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 # Вставьте свой API ключ OpenWeatherMap
-API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
+API_KEY = '9bddc2147fbae8b78bbc7e57e19a0852'
 CITY = "Irkutsk"
 URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric&lang=ru"
 

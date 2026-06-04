@@ -2,7 +2,7 @@ from app import create_app
 from app.database import get_db
 from moduls.user import User
 from moduls.venue import Venue
-from moduls.event import Event
+from moduls.event import Event, EventStatus
 from moduls.session import Session
 from moduls.seat import Seat
 from moduls.ticket import Ticket
@@ -28,7 +28,7 @@ def seed_irkutsk():
     app = create_app()
     with app.app_context():
         db = get_db()
-
+        
         print("🗑️ Очистка старых данных...")
         db.query(Payment).delete()
         db.query(Receipt).delete()
@@ -41,7 +41,7 @@ def seed_irkutsk():
         db.query(Venue).delete()
         db.query(User).delete()
         db.commit()
-
+        
         print("👥 Создание пользователей...")
         admin = User(
             email='admin@irk.ru',
@@ -114,7 +114,7 @@ def seed_irkutsk():
         db.commit()
         print("✅ Места созданы")
 
-        print("🎭 Создание событий...")
+        print("🎭 Создание событий (статус APPROVED)...")
         events = []
         for venue in venues:
             name = venue.name.lower()
@@ -148,14 +148,15 @@ def seed_irkutsk():
                     category=category,
                     duration_minutes=random.choice([90,120,150]),
                     age_restriction=random.choice([0,6,12,16,18]),
-                    poster_url=f'https://picsum.photos/300/200?random={random.randint(1,1000)}'
+                    poster_url=f'https://picsum.photos/300/200?random={random.randint(1,1000)}',
+                    status=EventStatus.APPROVED
                 )
                 db.add(event)
                 events.append(event)
         db.commit()
         print(f"✅ Создано {len(events)} событий")
 
-        print("📅 Генерация сеансов (прошлые и будущие)...")
+        print("📅 Генерация сеансов...")
         now = datetime.now()
         sessions = []
         for event in events:
@@ -180,7 +181,7 @@ def seed_irkutsk():
         db.commit()
         print(f"✅ Создано {len(sessions)} сеансов")
 
-        print("💰 Генерация оплаченных билетов (paid_at заполнен)...")
+        print("💰 Генерация оплаченных билетов (с платежами и чеками)...")
         tickets = []
         for session in sessions:
             if session.start_time < now:
@@ -203,7 +204,7 @@ def seed_irkutsk():
                         paid_at=paid_at
                     )
                     db.add(ticket)
-                    tickets.append(ticket)
+                    db.flush()   # чтобы получить ticket.id
                     payment = Payment(
                         ticket_id=ticket.id,
                         amount=session.base_price,
@@ -212,32 +213,38 @@ def seed_irkutsk():
                         paid_at=paid_at
                     )
                     db.add(payment)
-                    db.flush()
+                    db.flush()   # чтобы получить payment.id
                     receipt = Receipt(
                         payment_id=payment.id,
                         receipt_number=generate_receipt_number(),
                         sent_to_email=random.choice([True, False])
                     )
                     db.add(receipt)
+                    tickets.append(ticket)
         db.commit()
-        print(f"✅ Создано {len(tickets)} билетов (оплаченных)")
+        print(f"✅ Создано {len(tickets)} билетов")
 
         print("⭐ Генерация отзывов...")
         reviews_cnt = 0
-        paid_tickets = [t for t in tickets if t.session and t.session.start_time < now]
+        paid_tickets = [t for t in tickets if t.session and t.session.start_time < datetime.now()]
+        # Для контроля уникальности (user_id, event_id) будем использовать множество
+        used_pairs = set()
         for ticket in paid_tickets[:200]:
             if random.random() < 0.4:
-                existing = db.query(Review).filter_by(user_id=ticket.user_id, event_id=ticket.session.event_id).first()
-                if not existing:
-                    review = Review(
-                        user_id=ticket.user_id,
-                        event_id=ticket.session.event_id,
-                        rating=random.randint(3,5),
-                        comment=random.choice(['Отлично!', 'Неплохо', 'Восторг!', 'Рекомендую']),
-                        is_verified=True
-                    )
-                    db.add(review)
-                    reviews_cnt += 1
+                key = (ticket.user_id, ticket.session.event_id)
+                if key not in used_pairs:
+                    existing = db.query(Review).filter_by(user_id=ticket.user_id, event_id=ticket.session.event_id).first()
+                    if not existing:
+                        review = Review(
+                            user_id=ticket.user_id,
+                            event_id=ticket.session.event_id,
+                            rating=random.randint(3,5),
+                            comment=random.choice(['Отлично!', 'Неплохо', 'Восторг!', 'Рекомендую']),
+                            is_verified=True
+                        )
+                        db.add(review)
+                        used_pairs.add(key)
+                        reviews_cnt += 1
         db.commit()
         print(f"✅ Создано {reviews_cnt} отзывов")
 
@@ -251,7 +258,7 @@ def seed_irkutsk():
 
         print("\n✅✅✅ БАЗА ДАННЫХ ИРКУТСКА УСПЕШНО ЗАПОЛНЕНА!")
         print(f"   Заведений: {len(venues)}")
-        print(f"   Событий: {len(events)}")
+        print(f"   Событий: {len(events)} (статус APPROVED)")
         print(f"   Сеансов: {len(sessions)}")
         print(f"   Оплаченных билетов: {len(tickets)}")
         print(f"   Отзывов: {reviews_cnt}")

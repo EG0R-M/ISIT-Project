@@ -17,6 +17,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                                        <!-- Виджет погоды -->
+                    <li class="nav-item">
+                        <a href="{{ url_for('weather.weather_page') }}" class="nav-link weather-nav-link" id="weatherWidget">
+                            <span class="weather-icon">⛅</span>
+                            <span class="weather-temp">--°</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('events.list_events') }}">🎬 Мероприятия</a>
                     </li>
@@ -47,6 +54,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="{{ url_for('admin.index') }}">📊 Статистика</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('admin.events') }}">🎬 Управление событиями</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.pending_events') }}">📝 Модерация событий</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('admin.users') }}">👥 Пользователи</a></li>
                                 </ul>
                             </li>

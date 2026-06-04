@@ -146,3 +146,32 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCount();
     }
 });
+// ========== Загрузка погоды для виджета в шапке ==========
+function updateWeatherWidget() {
+    const widget = document.getElementById('weatherWidget');
+    if (!widget) return;
+    const iconSpan = widget.querySelector('.weather-icon');
+    const tempSpan = widget.querySelector('.weather-temp');
+    
+    fetch('/weather/api/weather')
+        .then(response => response.json())
+        .then(data => {
+            const icons = {
+                'rain': '🌧️',
+                'snow': '❄️',
+                'clouds': '☁️',
+                'clear': '☀️'
+            };
+            const icon = icons[data.weather_type] || '☀️';
+            if (iconSpan) iconSpan.textContent = icon;
+            if (tempSpan) tempSpan.textContent = `${data.temperature}°`;
+        })
+        .catch(err => {
+            console.warn('Не удалось загрузить погоду для виджета:', err);
+            if (iconSpan) iconSpan.textContent = '🌡️';
+            if (tempSpan) tempSpan.textContent = '--°';
+        });
+}
+
+// Запускаем обновление виджета после полной загрузки DOM
+document.addEventListener('DOMContentLoaded', updateWeatherWidget);

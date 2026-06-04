@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Создать мероприятие{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <h2>Создать мероприятие</h2>
+        <p class="text-muted">Заполните информацию о месте, мероприятии и сеансах. После отправки всё пройдёт модерацию администратора.</p>
+        
+        <form method="POST">
+            <!-- Место проведения -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">📍 Место проведения</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название заведения *</label>
+                        <input type="text" name="venue_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Адрес</label>
+                        <input type="text" name="venue_address" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Город *</label>
+                        <input type="text" name="venue_city" class="form-control" value="Иркутск" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Мероприятие -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">🎭 Информация о мероприятии</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название *</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Описание</label>
+                        <textarea name="description" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Категория *</label>
+                        <select name="category" class="form-select" required>
+                            <option value="movie">Кино</option>
+                            <option value="theater">Театр</option>
+                            <option value="concert">Концерт</option>
+                            <option value="sport">Спорт</option>
+                            <option value="exhibition">Выставка</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Длительность (минуты)</label>
+                        <input type="number" name="duration_minutes" class="form-control" placeholder="90">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Возрастное ограничение</label>
+                        <select name="age_restriction" class="form-select">
+                            <option value="0">0+</option>
+                            <option value="6">6+</option>
+                            <option value="12">12+</option>
+                            <option value="16">16+</option>
+                            <option value="18">18+</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">URL постера</label>
+                        <input type="url" name="poster_url" class="form-control" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сеансы (даты и цены) -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📅 Сеансы</h5>
+                    <button type="button" id="add-session-btn" class="btn btn-sm btn-primary">➕ Добавить сеанс</button>
+                </div>
+                <div class="card-body">
+                    <div id="sessions-container">
+                        <!-- Первый сеанс (по умолчанию) -->
+                        <div class="session-group" data-index="0">
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Дата и время начала *</label>
+                                    <input type="datetime-local" name="sessions_start[]" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Дата и время окончания</label>
+                                    <input type="datetime-local" name="sessions_end[]" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Цена (руб) *</label>
+                                    <input type="number" step="0.01" name="sessions_price[]" class="form-control" placeholder="500" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-text mt-2">Можно добавить несколько сеансов. Если дата окончания не указана, она будет вычислена автоматически (начало + длительность мероприятия).</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Отправить на модерацию</button>
+            <a href="{{ url_for('profile.dashboard') }}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/event_creator.js') }}"></script>
+{% endblock %}

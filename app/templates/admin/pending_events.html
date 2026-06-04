@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Модерация мероприятий{% endblock %}
+{% block content %}
+<h2>Мероприятия на модерации</h2>
+{% if events %}
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Дата создания</th><th>Название</th><th>Категория</th><th>Площадка</th><th>Автор</th><th>Действие</th></tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>{{ event.title }}</td>
+                <td>{{ event.category }}</td>
+                <td>{{ event.venue.name }} ({{ event.venue.city }})</td>
+                <td>{{ event.creator.full_name if event.creator else 'Неизвестен' }}</td>
+                <td>
+                    <a href="{{ url_for('admin.view_pending_event', event_id=event.id) }}" class="btn btn-sm btn-primary">👁️ Просмотреть</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Нет мероприятий на модерации.</p>
+{% endif %}
+<a href="{{ url_for('admin.index') }}" class="btn btn-secondary">Назад в админку</a>
+{% endblock %}

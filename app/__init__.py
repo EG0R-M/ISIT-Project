@@ -24,8 +24,10 @@ def create_app():
         return db.query(User).get(int(user_id))
 
     # Регистрация всех blueprint'ов
-    from app.routes import auth, events, bookings, profile, admin, favorites, api, venues, weather
+    from app.routes import auth, events, bookings, profile, admin, favorites, api, venues
     from app.routes.api_venues import api_venues_bp
+    from app.routes.weather import bp as weather_bp
+    from app.routes.user_events import bp as user_events_bp
     
     app.register_blueprint(auth.bp, url_prefix='/auth')
     app.register_blueprint(events.bp, url_prefix='/events')
@@ -35,8 +37,9 @@ def create_app():
     app.register_blueprint(favorites.bp)
     app.register_blueprint(api.bp)
     app.register_blueprint(venues.bp)
-    app.register_blueprint(weather.bp)
+    app.register_blueprint(weather_bp)          # <-- погода
     app.register_blueprint(api_venues_bp)
+    app.register_blueprint(user_events_bp)
 
     @app.route('/')
     def index():
