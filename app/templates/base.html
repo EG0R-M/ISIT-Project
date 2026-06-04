@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TicketBooking{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-glass">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('index') }}">🎫 Фишка</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('events.list_events') }}">🎬 Мероприятия</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('events.search') }}">🔍 Поиск</a>
                     </li>
-                    
+                </ul>
+                <ul class="navbar-nav align-items-center">
                     {% if current_user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
@@ -38,7 +42,7 @@
                                 <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">🚪 Выйти</a></li>
                             </ul>
                         </li>
-                        
+
                        {% if current_user.role == 'admin' %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -56,9 +60,14 @@
                             <a class="nav-link" href="{{ url_for('auth.login') }}">🔐 Войти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-primary text-white ms-2" href="{{ url_for('auth.register') }}">📝 Регистрация</a>
+                            <a class="nav-link" href="{{ url_for('auth.register') }}">📝 Регистрация</a>
                         </li>
                     {% endif %}
+                    <li class="nav-item ms-2">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -68,9 +77,9 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show glass" role="alert">
                         {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -81,8 +90,8 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted mb-0">© 2026 TicketBooking System. Все права защищены.</p>
-            <small class="text-muted">Бронирование билетов на мероприятия</small>
+            <p class="mb-0">© 2026 TicketBooking System. Все права защищены.</p>
+            <small>Бронирование билетов на мероприятия</small>
         </div>
     </footer>
 

@@ -203,6 +203,7 @@ def seed_irkutsk():
                         paid_at=paid_at
                     )
                     db.add(ticket)
+                    db.flush()
                     tickets.append(ticket)
                     payment = Payment(
                         ticket_id=ticket.id,
@@ -223,9 +224,15 @@ def seed_irkutsk():
         print(f"✅ Создано {len(tickets)} билетов (оплаченных)")
 
         print("⭐ Генерация отзывов...")
+        db.flush()
         reviews_cnt = 0
         paid_tickets = [t for t in tickets if t.session and t.session.start_time < now]
+        seen_pairs = set()
         for ticket in paid_tickets[:200]:
+            pair = (ticket.user_id, ticket.session.event_id)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
             if random.random() < 0.4:
                 existing = db.query(Review).filter_by(user_id=ticket.user_id, event_id=ticket.session.event_id).first()
                 if not existing:
@@ -242,6 +249,7 @@ def seed_irkutsk():
         print(f"✅ Создано {reviews_cnt} отзывов")
 
         print("❤️ Избранное...")
+        db.flush()
         for user in users:
             favs = random.sample(events, min(random.randint(2,5), len(events)))
             for ev in favs:
