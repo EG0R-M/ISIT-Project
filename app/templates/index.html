@@ -27,8 +27,8 @@
 fetch('/weather/api/weather')
     .then(response => response.json())
     .then(data => {
-        const icons = {'rain':'🌧️','snow':'❄️','clouds':'☁️','clear':'☀️'};
-        const icon = icons[data.weather_type] || '☀️';
+        const icons = {'rain':'☂','snow':'❄','clouds':'☁','clear':'☀'};
+        const icon = icons[data.weather_type] || '☀';
         const weatherHtml = `
             <div style="font-size: 3rem;">${icon}</div>
             <div class="display-6">${data.temperature}°C</div>

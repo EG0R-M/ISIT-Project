@@ -9,5 +9,5 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///booking.db')
     
-    OPENWEATHER_API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
+    OPENWEATHER_API_KEY = 'your-openweather-api-key-here'
     WEATHER_CITY = os.environ.get('WEATHER_CITY', 'Irkutsk')
