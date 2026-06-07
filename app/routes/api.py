@@ -10,6 +10,8 @@ from moduls.payment import Payment
 from datetime import datetime
 import random
 
+from app.routes.weather import get_weather
+
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/events')
@@ -134,3 +136,7 @@ def api_create_review():
     db.add(review)
     db.commit()
     return jsonify({'message': 'Review added'}), 201
+
+@bp.route('/weather')
+def api_weather():
+    return jsonify(get_weather())
