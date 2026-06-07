@@ -6,7 +6,7 @@ class Seat(Base):
     __tablename__ = "seats"
     
     id = Column(Integer, primary_key=True, index=True)
-    venue_id = Column(Integer, ForeignKey("venues.id", ondelete="CASCADE"), nullable=False)
+    hall_id = Column(Integer, ForeignKey("halls.id", ondelete="CASCADE"), nullable=False)
     row_number = Column(Integer, nullable=False)
     seat_number = Column(Integer, nullable=False)
     seat_type = Column(String(50), default="standard")  # standard / vip / disabled
@@ -14,12 +14,12 @@ class Seat(Base):
     
     # Уникальное ограничение: в одном зале нет двух одинаковых мест
     __table_args__ = (
-        UniqueConstraint('venue_id', 'row_number', 'seat_number', name='unique_seat_per_venue'),
+        UniqueConstraint('hall_id', 'row_number', 'seat_number', name='unique_seat_per_hall'),
     )
     
     # Связи
-    venue = relationship("Venue", back_populates="seats")
+    hall = relationship("Hall", back_populates="seats")
     tickets = relationship("Ticket", back_populates="seat")
     
     def __repr__(self):
-        return f"<Seat(id={self.id}, venue_id={self.venue_id}, row={self.row_number}, seat={self.seat_number})>"
+        return f"<Seat(id={self.id}, hall_id={self.hall_id}, row={self.row_number}, seat={self.seat_number})>"

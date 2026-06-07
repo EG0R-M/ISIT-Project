@@ -4,11 +4,6 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
 
-
-
-
-
-
 # Импортируем все модели для создания таблиц
 from .user import User
 from .venue import Venue
@@ -20,6 +15,8 @@ from .payment import Payment
 from .receipt import Receipt
 from .review import Review
 from .favorite import Favorite
+from .hall import Hall
+
 # Функция для подключения к БД
 def init_db(database_url="sqlite:///booking.db"):
     engine = create_engine(database_url, echo=True)
@@ -30,7 +27,7 @@ def init_db(database_url="sqlite:///booking.db"):
 __all__ = [
     "Base",
     "User",
-    "Venue", 
+    "Venue",
     "Event",
     "Seat",
     "Session",
@@ -38,5 +35,7 @@ __all__ = [
     "Payment",
     "Receipt",
     "Review",
+    "Favorite",
+    "Hall",
     "init_db"
 ]

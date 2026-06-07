@@ -12,12 +12,11 @@ class Venue(Base):
     city = Column(String(100), nullable=False)
     description = Column(Text)
     total_seats = Column(Integer, default=0)
-    
     created_at = Column(DateTime, server_default=func.now())
     
     # Связи
     events = relationship("Event", back_populates="venue", cascade="all, delete-orphan")
-    seats = relationship("Seat", back_populates="venue", cascade="all, delete-orphan")
+    halls = relationship("Hall", back_populates="venue", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Venue(id={self.id}, name={self.name}, city={self.city})>"

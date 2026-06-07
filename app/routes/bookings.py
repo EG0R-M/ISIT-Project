@@ -21,9 +21,10 @@ def select_seats(session_id):
     if not session:
         flash('Сеанс не найден', 'danger')
         return redirect(url_for('events.list_events'))
-    
-    venue_id = session.event.venue_id
-    seats = db.query(Seat).filter_by(venue_id=venue_id, is_active=True).order_by(Seat.row_number, Seat.seat_number).all()
+
+    # Получаем зал из сеанса
+    hall = session.hall
+    seats = db.query(Seat).filter_by(hall_id=hall.id, is_active=True).order_by(Seat.row_number, Seat.seat_number).all()
     
     # Получаем занятые места на этот сеанс
     taken = db.query(Ticket.seat_id).filter(

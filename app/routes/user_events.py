@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 from app.database import get_db
 from moduls.event import Event, EventStatus
 from moduls.venue import Venue
+from moduls.hall import Hall          # <-- добавлен импорт
+from moduls.seat import Seat
 from moduls.session import Session
 from datetime import datetime, timedelta
 
@@ -17,6 +19,10 @@ def create():
         venue_name = request.form.get('venue_name', '').strip()
         venue_address = request.form.get('venue_address', '').strip()
         venue_city = request.form.get('venue_city', '').strip()
+        
+        # Параметры зала
+        hall_rows = int(request.form.get('hall_rows', 5))
+        hall_seats_per_row = int(request.form.get('hall_seats_per_row', 10))
         
         if not venue_name or not venue_city:
             flash('Название заведения и город обязательны.', 'danger')
@@ -33,6 +39,30 @@ def create():
             )
             db.add(venue)
             db.flush()
+        
+        # ---- Создаём зал и места ----
+        hall = Hall(
+            venue_id=venue.id,
+            name='Основной зал',
+            rows=hall_rows,
+            seats_per_row=hall_seats_per_row
+        )
+        db.add(hall)
+        db.flush()
+        
+        for row in range(1, hall.rows+1):
+            for seat_num in range(1, hall.seats_per_row+1):
+                seat_type = 'vip' if row <= 2 else 'standard'
+                seat = Seat(
+                    hall_id=hall.id,
+                    row_number=row,
+                    seat_number=seat_num,
+                    seat_type=seat_type,
+                    is_active=True
+                )
+                db.add(seat)
+        
+        venue.total_seats = hall.rows * hall.seats_per_row
         
         # ---- Основные данные мероприятия ----
         title = request.form.get('title', '').strip()
@@ -95,6 +125,7 @@ def create():
             
             session = Session(
                 event_id=event.id,
+                hall_id=hall.id,           # <-- привязка к залу
                 start_time=start,
                 end_time=end,
                 base_price=price,

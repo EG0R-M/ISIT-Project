@@ -4,6 +4,7 @@ from app import create_app
 from app.database import get_db
 from moduls.user import User
 from moduls.venue import Venue
+from moduls.hall import Hall          # <-- добавлен импорт
 from moduls.event import Event, EventStatus
 from moduls.session import Session
 from moduls.seat import Seat
@@ -21,10 +22,11 @@ def seed_from_json():
     with app.app_context():
         db = get_db()
 
-        print("🗑 Очистка старых данных...")
         # Удаляем таблицы в порядке зависимостей (от дочерних к родительским)
+        print("Очистка старых данных...")
         db.query(Seat).delete()
         db.query(Session).delete()
+        db.query(Hall).delete()        # <-- добавлено
         db.query(Event).delete()
         db.query(Venue).delete()
         db.query(User).delete()
@@ -65,7 +67,7 @@ def seed_from_json():
                 name=vd['name'],
                 address=vd['address'],
                 city=vd['city'],
-                total_seats=vd.get('rows', 0) * vd.get('seats_per_row', 0)
+                total_seats=0
             )
             db.add(venue)
             db.flush()  # получаем id
@@ -73,24 +75,37 @@ def seed_from_json():
         db.commit()
         print(f"✅ Загружено {len(venues)} заведений")
 
-        print("💺 Генерация мест для залов...")
+        print("💺 Генерация залов и мест...")
         for vd in venues_data:
             venue = venues[vd['name']]
-            rows = vd.get('rows', 5)
-            seats_per_row = vd.get('seats_per_row', 10)
-            for row in range(1, rows+1):
-                for seat_num in range(1, seats_per_row+1):
-                    seat_type = 'vip' if row <= 2 else 'standard'
-                    seat = Seat(
-                        venue_id=venue.id,
-                        row_number=row,
-                        seat_number=seat_num,
-                        seat_type=seat_type,
-                        is_active=True
-                    )
-                    db.add(seat)
-            # Обновляем total_seats в venue
-            venue.total_seats = rows * seats_per_row
+            halls_data = vd.get('halls', [])
+            if not halls_data:
+                halls_data = [{'name': 'Основной зал', 'rows': 5, 'seats_per_row': 10}]
+            
+            total_seats_venue = 0
+            for hd in halls_data:
+                hall = Hall(
+                    venue_id=venue.id,
+                    name=hd.get('name'),
+                    rows=hd['rows'],
+                    seats_per_row=hd['seats_per_row']
+                )
+                db.add(hall)
+                db.flush()
+                # Генерация мест в зале
+                for row in range(1, hall.rows+1):
+                    for seat_num in range(1, hall.seats_per_row+1):
+                        seat_type = 'vip' if row <= 2 else 'standard'
+                        seat = Seat(
+                            hall_id=hall.id,
+                            row_number=row,
+                            seat_number=seat_num,
+                            seat_type=seat_type,
+                            is_active=True
+                        )
+                        db.add(seat)
+                total_seats_venue += hall.rows * hall.seats_per_row
+            venue.total_seats = total_seats_venue
         db.commit()
         print("✅ Места созданы")
 
@@ -135,6 +150,11 @@ def seed_from_json():
             if not event:
                 print(f"⚠️ Событие '{sd['event_title']}' не найдено. Сеанс пропущен.")
                 continue
+            # Берём первый зал этого заведения
+            hall = db.query(Hall).filter_by(venue_id=event.venue_id).first()
+            if not hall:
+                print(f"⚠️ Нет залов для заведения {event.venue.name}, сеанс пропущен.")
+                continue
             start = datetime.fromisoformat(sd['start_time'])
             # Если end_time не указан, вычисляем по длительности события
             if 'end_time' in sd and sd['end_time']:
@@ -143,6 +163,7 @@ def seed_from_json():
                 end = start + timedelta(minutes=event.duration_minutes)
             session = Session(
                 event_id=event.id,
+                hall_id=hall.id,          # <-- добавлена привязка к залу
                 start_time=start,
                 end_time=end,
                 base_price=sd['base_price'],
