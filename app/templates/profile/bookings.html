@@ -9,7 +9,7 @@
     <tbody>
         {% for ticket in tickets %}
         <tr>
-            <td>{{ ticket.event.title }}</td>
+            <td>{{ ticket.session.event.title }}</td>
             <td>{{ ticket.session.start_time|datetime }}</td>
             <td>Ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</td>
             <td>{{ ticket.price_paid }} руб.</td>

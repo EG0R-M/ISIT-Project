@@ -13,7 +13,18 @@
         {% endif %}
     </div>
     <div class="col-md-8">
-        <h1>{{ event.title }}</h1>
+        <div class="d-flex justify-content-between align-items-start">
+            <h1>{{ event.title }}</h1>
+            {% if current_user.is_authenticated %}
+                {% if is_favorited %}
+                    <a href="{{ url_for('favorites.remove', event_id=event.id) }}" class="btn btn-outline-danger">❤️ В избранном</a>
+                {% else %}
+                    <a href="{{ url_for('favorites.add', event_id=event.id) }}" class="btn btn-outline-secondary">🤍 В избранное</a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary">🔐 Войдите, чтобы добавить в избранное</a>
+            {% endif %}
+        </div>
         <p><strong>Категория:</strong> 
             {{ {'movie':'Кино','theater':'Театр','concert':'Концерт','sport':'Спорт','exhibition':'Выставка'}[event.category] }}
         </p>

@@ -31,7 +31,14 @@
                     </div>
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ event.title }}</h5>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        {% if event.is_favorited %}
+                            <a href="{{ url_for('favorites.remove', event_id=event.id) }}" class="text-danger text-decoration-none" title="Удалить из избранного">❤️</a>
+                        {% else %}
+                            <a href="{{ url_for('favorites.add', event_id=event.id) }}" class="text-secondary text-decoration-none" title="Добавить в избранное">🤍</a>
+                        {% endif %}
+                    </div>
                     <p class="card-text">{{ event.description[:100] if event.description else 'Описание отсутствует' }}...</p>
                     <p><strong>Категория:</strong> 
                         {{ {'movie':'Кино','theater':'Театр','concert':'Концерт','sport':'Спорт','exhibition':'Выставка'}[event.category] }}

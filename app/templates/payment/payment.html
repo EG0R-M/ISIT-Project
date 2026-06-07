@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <h2>Оплата билета</h2>
-        <p><strong>Мероприятие:</strong> {{ ticket.event.title }}</p>
+        <p><strong>Мероприятие:</strong> {{ ticket.session.event.title }}</p>
         <p><strong>Дата и время:</strong> {{ ticket.session.start_time|datetime }}</p>
         <p><strong>Место:</strong> ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</p>
         <p><strong>Сумма:</strong> {{ ticket.price_paid|number }} руб.</p>
