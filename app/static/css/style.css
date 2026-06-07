@@ -17,9 +17,9 @@
 
   --body-bg: #1a0a0e;
   --body-bg-end: #0d1117;
-  --text-primary: #F5F0E8;
-  --text-secondary: #A89F94;
-  --text-muted: #8A7E74;
+  --text-primary: #FFFFFF;
+  --text-secondary: #D4C8BC;
+  --text-muted: #A89F94;
   --card-bg: rgba(255, 248, 240, 0.06);
   --input-bg: rgba(255, 248, 240, 0.06);
   --input-border: rgba(255, 248, 240, 0.15);
@@ -656,8 +656,15 @@ input[type="tel"]:valid {
 }
 
 .table {
+  --bs-table-color: var(--text-primary);
+  --bs-table-bg: transparent;
   color: var(--text-primary);
   border-color: var(--divider-color);
+}
+
+.table td,
+.table th {
+  color: var(--text-primary);
 }
 
 .table-striped>tbody>tr:nth-of-type(odd) {
@@ -1160,11 +1167,6 @@ input[type="radio"] {
   border-color: var(--divider-color);
 }
 
-/* Tables */
-.table {
-  --bs-table-bg: transparent;
-  color: var(--text-primary);
-}
 
 /* Event card placeholder for missing poster */
 .card-img-top.bg-secondary {
