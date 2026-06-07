@@ -1,9 +1,11 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 from config import Config
 from app.database import close_db
 
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -12,6 +14,8 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Пожалуйста, войдите для доступа.'
+
+    csrf.init_app(app)
 
     app.teardown_appcontext(close_db)
 
@@ -22,6 +26,32 @@ def create_app():
     def load_user(user_id):
         db = get_db()
         return db.query(User).get(int(user_id))
+
+    # Jinja2 custom filters
+    @app.template_filter('datetime')
+    def format_datetime(value, fmt='%d.%m.%Y %H:%M'):
+        if value is None:
+            return ''
+        return value.strftime(fmt)
+
+    @app.template_filter('number')
+    def format_number(value):
+        if value is None:
+            return ''
+        return f'{value:,.2f}'.replace(',', ' ')
+
+    # Error handlers
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('errors/404.html'), 404
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template('errors/403.html'), 403
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return render_template('errors/500.html'), 500
 
     # Регистрация всех blueprint'ов
     from app.routes import auth, events, bookings, profile, admin, favorites, api, venues
