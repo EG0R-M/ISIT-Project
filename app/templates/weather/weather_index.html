@@ -1,26 +1,113 @@
 <!DOCTYPE html>
 <html lang="ru">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <title>Погода в Иркутске</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/weather_style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
 </head>
 <body>
-    <div class="weather-container">
-        <div class="weather-card">
-            <h1>Погода в Иркутске</h1>
-            <div class="weather-info">
-                <div class="weather-type" id="weatherType">Загрузка...</div>
-                <div class="temperature" id="temperature">--°C</div>
-                <div class="advice">
-                    <div class="advice-text" id="adviceText">Загрузка совета...</div>
+
+    <nav class="navbar navbar-expand-lg navbar-glass">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">🎫 Фишка</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                                        <!-- Виджет погоды -->
+                    <li class="nav-item">
+                        <a href="{{ url_for('weather.weather_page') }}" class="nav-link weather-nav-link" id="weatherWidget">
+                            <span class="weather-icon">🌡</span>
+                            <span class="weather-temp">--°</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('events.search') }}">🔍 Поиск</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav align-items-center">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                👤 {{ current_user.full_name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile.dashboard') }}">📊 Профиль</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile.bookings') }}">🎟️ Мои билеты</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('favorites.list_favorites') }}">❤️ Избранное</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile.edit') }}">✏️ Редактировать профиль</a></li>
+                                {% if current_user.role == 'organizer' or current_user.role == 'admin' %}
+                                <li><a class="dropdown-item" href="{{ url_for('user_events.list_events') }}">🎪 Мои мероприятия</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">🚪 Выйти</a></li>
+                            </ul>
+                        </li>
+
+                       {% if current_user.role == 'admin' %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    ⚙️ Админка
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.index') }}">📊 Статистика</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.events') }}">🎬 Управление событиями</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.pending_events') }}">📝 Модерация событий</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.users') }}">👥 Пользователи</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">🔐 Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.register') }}">📝 Регистрация</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item ms-2">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== ОСНОВНОЙ КОНТЕНТ ========== -->
+    <main class="container mt-4">
+        <div class="weather-container">
+            <div class="weather-card">
+                <h1>Погода в Иркутске</h1>
+                <div class="weather-info">
+                    <div class="weather-type" id="weatherType">Загрузка...</div>
+                    <div class="temperature" id="temperature">--°C</div>
+                    <div class="advice">
+                        <div class="advice-text" id="adviceText">Загрузка совета...</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
+    <!-- ========== КОНТЕЙНЕРЫ ДЛЯ АНИМАЦИИ (вне main, чтобы на всю ширину) ========== -->
     <div id="rain-container" class="animation-container" style="display: none;"></div>
     <div id="snow-container" class="animation-container" style="display: none;">
         <canvas id="snow-canvas"></canvas>
@@ -33,8 +120,19 @@
         </div>
     </div>
 
+    <!-- ========== ПОДВАЛ ========== -->
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted mb-0">© 2026 TicketBooking System. Все права защищены.</p>
+            <small class="text-muted">Бронирование билетов на мероприятия</small>
+        </div>
+    </footer>
+
+    <!-- ========== СКРИПТЫ ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
-        let currentWeather = null;
+let currentWeather = null;
         let rainAnimation = null;
         
         // Списки советов
@@ -123,19 +221,17 @@
                 case 'rain':
                     document.getElementById('rain-container').style.display = 'block';
                     startRainAnimation();
-                    document.body.style.background = 'linear-gradient(135deg, #1F0D12 0%, #0d1117 100%)';
                     break;
                 case 'snow':
                     document.getElementById('snow-container').style.display = 'block';
                     startSnowAnimation();
-                    document.body.style.background = 'linear-gradient(135deg, #1F1512 0%, #0d1117 100%)';
                     break;
                 case 'clouds':
                     document.getElementById('clouds-container').style.display = 'block';
-                    document.body.style.background = 'linear-gradient(135deg, #1a0a0e 0%, #0d1117 100%)';
                     break;
                 default:
-                    document.body.style.background = 'linear-gradient(135deg, #1a0a0e 0%, #0d1117 100%)';
+                    // Ничего не делаем, фон управляется темой
+                    break;
             }
         }
 
