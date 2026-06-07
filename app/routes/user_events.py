@@ -3,12 +3,76 @@ from flask_login import login_required, current_user
 from app.database import get_db
 from moduls.event import Event, EventStatus
 from moduls.venue import Venue
-from moduls.hall import Hall          # <-- добавлен импорт
+from moduls.hall import Hall
 from moduls.seat import Seat
 from moduls.session import Session
+from moduls.ticket import Ticket
+from moduls.user import User
 from datetime import datetime, timedelta
+from sqlalchemy import func
 
 bp = Blueprint('user_events', __name__, url_prefix='/my-events')
+
+
+@bp.route('/')
+@login_required
+def list_events():
+    db = get_db()
+    events = db.query(Event).filter_by(user_id=current_user.id).order_by(Event.created_at.desc()).all()
+
+    stats = []
+    for event in events:
+        total_sessions = db.query(Session).filter_by(event_id=event.id).count()
+        paid_tickets = db.query(Ticket).join(Session).filter(
+            Session.event_id == event.id,
+            Ticket.status == 'paid'
+        ).count()
+        total_revenue = db.query(func.coalesce(func.sum(Ticket.price_paid), 0)).join(Session).filter(
+            Session.event_id == event.id,
+            Ticket.status == 'paid'
+        ).scalar()
+        stats.append({
+            'total_sessions': total_sessions,
+            'paid_tickets': paid_tickets,
+            'total_revenue': float(total_revenue)
+        })
+
+    return render_template('user_events/list.html', events=events, stats=stats)
+
+
+@bp.route('/<int:event_id>')
+@login_required
+def detail(event_id):
+    db = get_db()
+    event = db.query(Event).get(event_id)
+    if not event or event.user_id != current_user.id:
+        flash('Мероприятие не найдено.', 'danger')
+        return redirect(url_for('user_events.list_events'))
+
+    sessions = db.query(Session).filter_by(event_id=event.id).order_by(Session.start_time).all()
+
+    session_stats = []
+    for s in sessions:
+        total_seats = db.query(Seat).filter_by(hall_id=s.hall_id, is_active=True).count()
+        paid = db.query(Ticket).filter_by(session_id=s.id, status='paid').count()
+        pending = db.query(Ticket).filter_by(session_id=s.id, status='pending').count()
+        revenue = db.query(func.coalesce(func.sum(Ticket.price_paid), 0)).filter(
+            Ticket.session_id == s.id, Ticket.status == 'paid'
+        ).scalar()
+        tickets = db.query(Ticket).filter_by(session_id=s.id).order_by(Ticket.created_at.desc()).all()
+        for t in tickets:
+            t.buyer = db.query(User).get(t.user_id)
+            t.seat_info = db.query(Seat).get(t.seat_id)
+        session_stats.append({
+            'session': s,
+            'total_seats': total_seats,
+            'paid': paid,
+            'pending': pending,
+            'revenue': float(revenue),
+            'tickets': tickets
+        })
+
+    return render_template('user_events/detail.html', event=event, session_stats=session_stats)
 
 @bp.route('/create', methods=['GET', 'POST'])
 @login_required

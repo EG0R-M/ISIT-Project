@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('user_events.list_events') }}" class="btn btn-sm btn-secondary mb-3">← Назад к моим мероприятиям</a>
+
+<div class="event-info-card mb-4">
+    <div class="info">
+        <h2>{{ event.title }}</h2>
+        <p class="text-muted">{{ event.description }}</p>
+        <p>
+            {% if event.status.value == 'approved' %}
+                <span class="badge bg-success">Одобрено</span>
+            {% elif event.status.value == 'pending' %}
+                <span class="badge bg-warning">На модерации</span>
+            {% elif event.status.value == 'rejected' %}
+                <span class="badge bg-danger">Отклонено</span>
+            {% endif %}
+            <span class="badge bg-info">{{ {'movie':'🎬 Кино','theater':'🎭 Театр','concert':'🎶 Концерт','sport':'🏆 Спорт','exhibition':'🖼️ Выставка'}.get(event.category, event.category) }}</span>
+            {% if event.age_restriction and event.age_restriction > 0 %}
+                <span class="badge" style="background: var(--burgundy);">{{ event.age_restriction }}+</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+{% for s in session_stats %}
+{% set ses = s.session %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0">📅 {{ ses.start_time.strftime('%d.%m.%Y %H:%M') }} — {{ ses.end_time.strftime('%H:%M') }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <small class="text-muted">Цена билета</small><br>
+                <strong>{{ ses.base_price }} ₽</strong>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted">Всего мест в зале</small><br>
+                <strong>{{ s.total_seats }}</strong>
+            </div>
+            <div class="col-md-2">
+                <small class="text-muted">Продано</small><br>
+                <strong style="color: var(--status-paid);">{{ s.paid }}</strong>
+            </div>
+            <div class="col-md-2">
+                <small class="text-muted">Броней</small><br>
+                <strong style="color: var(--gold);">{{ s.pending }}</strong>
+            </div>
+            <div class="col-md-2">
+                <small class="text-muted">Выручка</small><br>
+                <strong style="color: var(--gold);">{{ s.revenue }} ₽</strong>
+            </div>
+        </div>
+
+        {% if s.tickets %}
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Покупатель</th>
+                    <th>Место</th>
+                    <th>Цена</th>
+                    <th>Статус</th>
+                    <th>Дата покупки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in s.tickets %}
+                <tr>
+                    <td>{{ t.buyer.full_name if t.buyer else '—' }}<br><small class="text-muted">{{ t.buyer.email if t.buyer else '' }}</small></td>
+                    <td>Ряд {{ t.seat_info.row_number if t.seat_info else '?' }}, Место {{ t.seat_info.seat_number if t.seat_info else '?' }}</td>
+                    <td>{{ t.price_paid }} ₽</td>
+                    <td>
+                        {% if t.status == 'paid' %}
+                            <span class="status-paid">Оплачен</span>
+                        {% elif t.status == 'pending' %}
+                            <span class="status-pending">Бронь</span>
+                        {% elif t.status == 'cancelled' %}
+                            <span class="status-cancelled">Отменён</span>
+                        {% else %}
+                            <span class="status-expired">{{ t.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ t.paid_at.strftime('%d.%m.%Y %H:%M') if t.paid_at else '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted mb-0">Билеты ещё не проданы.</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

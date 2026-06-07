@@ -17,6 +17,10 @@ def register():
         phone = request.form['phone']
         password = request.form['password']
         confirm = request.form['confirm_password']
+        role = request.form.get('role', 'user')
+        
+        if role not in ('user', 'organizer'):
+            role = 'user'
         
         if password != confirm:
             flash('Пароли не совпадают.', 'danger')
@@ -34,7 +38,7 @@ def register():
             full_name=full_name,
             phone=phone,
             password_hash=hashed,
-            role='user'
+            role=role
         )
         db.add(new_user)
         db.commit()

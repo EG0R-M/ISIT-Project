@@ -7,6 +7,25 @@
         <p class="text-muted">Создайте аккаунт для бронирования билетов</p>
         
         <form method="POST">
+            <div class="mb-4">
+                <label class="form-label">Вы собираетесь <span class="text-danger">*</span></label>
+                <div class="d-flex gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="roleBuyer" value="user" checked>
+                        <label class="form-check-label" for="roleBuyer">
+                            🎫 Покупать билеты
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="roleOrganizer" value="organizer">
+                        <label class="form-check-label" for="roleOrganizer">
+                            🎪 Организовывать мероприятия
+                        </label>
+                    </div>
+                </div>
+                <div class="form-text">Вы сможете изменить тип аккаунта позже в профиле</div>
+            </div>
+
             <div class="mb-3">
                 <label for="email" class="form-label">
                     Email <span class="text-danger">*</span>

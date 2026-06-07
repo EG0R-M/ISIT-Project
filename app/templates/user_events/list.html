@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Мои мероприятия{% endblock %}
+{% block content %}
+<h1>🎪 Мои мероприятия</h1>
+{% if not events %}
+    <div class="text-center p-5" style="color: var(--text-muted);">
+        <p style="font-size: 3em; margin-bottom: 8px;">🎭</p>
+        <p>У вас пока нет созданных мероприятий.</p>
+        <a href="{{ url_for('user_events.create') }}" class="btn btn-warning">➕ Создать мероприятие</a>
+    </div>
+{% else %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Статус</th>
+                <th>Сеансы</th>
+                <th>Продано билетов</th>
+                <th>Выручка</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            {% set s = stats[loop.index0] %}
+            <tr>
+                <td><strong>{{ event.title }}</strong></td>
+                <td>
+                    <span class="category-badge">
+                        {{ {'movie':'🎬 Кино','theater':'🎭 Театр','concert':'🎶 Концерт','sport':'🏆 Спорт','exhibition':'🖼️ Выставка'}.get(event.category, event.category) }}
+                    </span>
+                </td>
+                <td>
+                    {% if event.status.value == 'approved' %}
+                        <span class="badge bg-success">Одобрено</span>
+                    {% elif event.status.value == 'pending' %}
+                        <span class="badge bg-warning">На модерации</span>
+                    {% elif event.status.value == 'rejected' %}
+                        <span class="badge bg-danger">Отклонено</span>
+                    {% endif %}
+                </td>
+                <td>{{ s.total_sessions }}</td>
+                <td>{{ s.paid_tickets }}</td>
+                <td>{{ s.total_revenue }} ₽</td>
+                <td><a href="{{ url_for('user_events.detail', event_id=event.id) }}" class="btn btn-sm btn-primary">Подробнее</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

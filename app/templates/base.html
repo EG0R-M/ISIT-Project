@@ -45,6 +45,9 @@
                                 <li><a class="dropdown-item" href="{{ url_for('profile.bookings') }}">🎟️ Мои билеты</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('favorites.list_favorites') }}">❤️ Избранное</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('profile.edit') }}">✏️ Редактировать профиль</a></li>
+                                {% if current_user.role == 'organizer' or current_user.role == 'admin' %}
+                                <li><a class="dropdown-item" href="{{ url_for('user_events.list_events') }}">🎪 Мои мероприятия</a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">🚪 Выйти</a></li>
                             </ul>

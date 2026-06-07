@@ -5,6 +5,15 @@
 <p><strong>Имя:</strong> {{ user.full_name }}</p>
 <p><strong>Email:</strong> {{ user.email }}</p>
 <p><strong>Телефон:</strong> {{ user.phone or 'не указан' }}</p>
+{% if user.role == 'organizer' %}
+    <div class="mb-3 p-3 glass" style="border: 1px solid var(--gold);">
+        <h5 class="mb-3" style="color: var(--gold);">🎪 Панель организатора</h5>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('user_events.list_events') }}" class="btn btn-warning">📋 Мои мероприятия</a>
+            <a href="{{ url_for('user_events.create') }}" class="btn btn-outline-warning">➕ Создать мероприятие</a>
+        </div>
+    </div>
+{% endif %}
 <a href="{{ url_for('profile.bookings') }}" class="btn btn-primary">Мои билеты</a>
 <a href="{{ url_for('profile.my_reviews') }}" class="btn btn-info mb-2">📝 Мои отзывы</a>
-<a href="{{ url_for('user_events.create') }}" class="btn btn-outline-primary mb-2">➕ Создать мероприятие</a>{% endblock %}
+{% endblock %}
