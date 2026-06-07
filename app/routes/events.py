@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from app.database import get_db
+from moduls.favorite import Favorite
 from moduls.event import Event, EventStatus
 from moduls.session import Session
 from moduls.ticket import Ticket
@@ -29,6 +30,13 @@ def list_events():
     total = query.count()
     offset = (page - 1) * per_page
     events = query.offset(offset).limit(per_page).all()
+    if current_user.is_authenticated:
+        favorite_ids = {f.event_id for f in db.query(Favorite).filter_by(user_id=current_user.id).all()}
+        for event in events:
+            event.is_favorited = event.id in favorite_ids
+    else:
+        for event in events:
+            event.is_favorited = False
 
     total_pages = math.ceil(total / per_page) if total > 0 else 1
     has_prev = page > 1
@@ -81,6 +89,7 @@ def detail(event_id):
     reviews = db.query(Review).filter_by(event_id=event_id).order_by(Review.created_at.desc()).limit(10).all()
 
     user_can_review = False
+    is_favorited = False
     if current_user.is_authenticated:
         now = datetime.now()
         user_can_review = db.query(Ticket).filter(
@@ -89,12 +98,14 @@ def detail(event_id):
             Ticket.status == 'paid',
             Ticket.session.has(Session.start_time < now)
         ).first() is not None
+        is_favorited = db.query(Favorite).filter_by(user_id=current_user.id, event_id=event_id).first() is not None
 
     return render_template('events/detail.html',
                           event=event,
                           sessions=sessions,
                           reviews=reviews,
-                          user_can_review=user_can_review)
+                          user_can_review=user_can_review,
+                          is_favorited=is_favorited)
 
 @bp.route('/search')
 def search():
@@ -102,25 +113,34 @@ def search():
     q = request.args.get('q', '')
     category = request.args.get('category', '')
     date_from = request.args.get('date_from', '')
+    date_to = request.args.get('date_to', '')
     page = request.args.get('page', 1, type=int)
     per_page = 12
 
     query = db.query(Event)
-    # Фильтр по статусу
     if not (current_user.is_authenticated and current_user.role == 'admin'):
         query = query.filter(Event.status == EventStatus.APPROVED)
-
     if q:
         query = query.filter(Event.title.contains(q) | Event.description.contains(q))
     if category:
         query = query.filter_by(category=category)
     if date_from:
-        subq = db.query(Session.event_id).filter(Session.start_time >= date_from).subquery()
-        query = query.filter(Event.id.in_(subq))
+        subq_from = db.query(Session.event_id).filter(Session.start_time >= date_from).subquery()
+        query = query.filter(Event.id.in_(subq_from))
+    if date_to:
+        subq_to = db.query(Session.event_id).filter(Session.start_time <= date_to).subquery()
+        query = query.filter(Event.id.in_(subq_to))
 
     total = query.count()
     offset = (page - 1) * per_page
     events = query.offset(offset).limit(per_page).all()
+    if current_user.is_authenticated:
+        favorite_ids = {f.event_id for f in db.query(Favorite).filter_by(user_id=current_user.id).all()}
+        for event in events:
+            event.is_favorited = event.id in favorite_ids
+    else:
+        for event in events:
+            event.is_favorited = False
 
     total_pages = math.ceil(total / per_page) if total > 0 else 1
     has_prev = page > 1
@@ -141,13 +161,9 @@ def search():
         'next_num': page + 1 if has_next else None,
         'pages': total_pages,
         'page': page,
-        'total': total
+        'total': total,
+        'iter_pages': lambda: range(1, total_pages + 1)
     }
-
-    def iter_pages():
-        for i in range(1, total_pages + 1):
-            yield i
-    pagination['iter_pages'] = iter_pages
 
     return render_template('events/search.html',
                           events=events,
@@ -155,6 +171,7 @@ def search():
                           q=q,
                           selected=category,
                           date_from=date_from,
+                          date_to=date_to,
                           pagination=pagination,
                           page=page)
 

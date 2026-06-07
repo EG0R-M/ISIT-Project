@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
+from sqlalchemy.orm import joinedload
 from app.database import get_db
 from moduls.ticket import Ticket
 from moduls.session import Session
@@ -98,7 +99,10 @@ def cancel(ticket_id):
 @login_required
 def pay(ticket_id):
     db = get_db()
-    ticket = db.query(Ticket).get(ticket_id)
+    ticket = db.query(Ticket).options(
+        joinedload(Ticket.session).joinedload(Session.event),
+        joinedload(Ticket.seat)
+    ).get(ticket_id)
     if not ticket or ticket.user_id != current_user.id:
         flash('Билет не найден.', 'danger')
         return redirect(url_for('profile.bookings'))
@@ -106,12 +110,6 @@ def pay(ticket_id):
     if ticket.status == 'paid':
         flash('Билет уже оплачен.', 'info')
         return redirect(url_for('profile.bookings'))
-    
-    # Подгружаем связанные объекты
-    ticket.session = db.query(Session).get(ticket.session_id)
-    if ticket.session:
-        ticket.event = db.query(Event).get(ticket.session.event_id)
-    ticket.seat = db.query(Seat).get(ticket.seat_id)
     
     if request.method == 'POST':
         ticket.status = 'paid'
@@ -145,7 +143,10 @@ def pay(ticket_id):
 @login_required
 def receipt(ticket_id):
     db = get_db()
-    ticket = db.query(Ticket).get(ticket_id)
+    ticket = db.query(Ticket).options(
+        joinedload(Ticket.session).joinedload(Session.event),
+        joinedload(Ticket.seat)
+    ).get(ticket_id)
     if not ticket or ticket.user_id != current_user.id:
         flash('Чек не найден.', 'danger')
         return redirect(url_for('profile.bookings'))
@@ -156,11 +157,5 @@ def receipt(ticket_id):
         return redirect(url_for('profile.bookings'))
     
     receipt = db.query(Receipt).filter_by(payment_id=payment.id).first()
-    
-    # Подгружаем связанные данные
-    ticket.session = db.query(Session).get(ticket.session_id)
-    if ticket.session:
-        ticket.event = db.query(Event).get(ticket.session.event_id)
-    ticket.seat = db.query(Seat).get(ticket.seat_id)
     
     return render_template('payment/receipt.html', ticket=ticket, payment=payment, receipt=receipt)

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import joinedload
 from app.database import get_db
 from moduls.ticket import Ticket
 from moduls.session import Session
@@ -19,12 +20,10 @@ def dashboard():
 @login_required
 def bookings():
     db = get_db()
-    tickets = db.query(Ticket).filter_by(user_id=current_user.id).order_by(Ticket.created_at.desc()).all()
-    for t in tickets:
-        t.session = db.query(Session).get(t.session_id)
-        if t.session:
-            t.event = db.query(Event).get(t.session.event_id)
-        t.seat = db.query(Seat).get(t.seat_id)
+    tickets = db.query(Ticket).options(
+        joinedload(Ticket.session).joinedload(Session.event),
+        joinedload(Ticket.seat)
+    ).filter_by(user_id=current_user.id).order_by(Ticket.created_at.desc()).all()
     return render_template('profile/bookings.html', tickets=tickets)
 
 @bp.route('/edit', methods=['GET', 'POST'])
@@ -75,9 +74,9 @@ def edit():
 @login_required
 def my_reviews():
     db = get_db()
-    reviews = db.query(Review).filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
-    for review in reviews:
-        review.event = db.query(Event).get(review.event_id)
+    reviews = db.query(Review).options(
+        joinedload(Review.event)
+    ).filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
     return render_template('profile/my_reviews.html', reviews=reviews)
 
 @bp.route('/review/delete/<int:review_id>')
