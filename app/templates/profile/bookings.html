@@ -10,7 +10,7 @@
         {% for ticket in tickets %}
         <tr>
             <td>{{ ticket.event.title }}</td>
-            <td>{{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ ticket.session.start_time|datetime }}</td>
             <td>Ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</td>
             <td>{{ ticket.price_paid }} руб.</td>
             <td>

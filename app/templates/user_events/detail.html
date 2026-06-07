@@ -27,7 +27,7 @@
 {% set ses = s.session %}
 <div class="card mb-3">
     <div class="card-header">
-        <h5 class="mb-0">📅 {{ ses.start_time.strftime('%d.%m.%Y %H:%M') }} — {{ ses.end_time.strftime('%H:%M') }}</h5>
+        <h5 class="mb-0">📅 {{ ses.start_time|datetime }} — {{ ses.end_time|datetime('%H:%M') }}</h5>
     </div>
     <div class="card-body">
         <div class="row mb-3">
@@ -81,7 +81,7 @@
                             <span class="status-expired">{{ t.status }}</span>
                         {% endif %}
                     </td>
-                    <td>{{ t.paid_at.strftime('%d.%m.%Y %H:%M') if t.paid_at else '—' }}</td>
+                    <td>{{ t.paid_at|datetime if t.paid_at else '—' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

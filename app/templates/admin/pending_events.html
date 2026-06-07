@@ -10,7 +10,7 @@
         <tbody>
             {% for event in events %}
             <tr>
-                <td>{{ event.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>{{ event.created_at|datetime }}</td>
                 <td>{{ event.title }}</td>
                 <td>{{ event.category }}</td>
                 <td>{{ event.venue.name }} ({{ event.venue.city }})</td>

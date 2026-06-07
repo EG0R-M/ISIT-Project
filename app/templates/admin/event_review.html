@@ -7,7 +7,7 @@
             <div class="card-header">
                 <h3>Заявка на мероприятие</h3>
                 <p class="text-muted">От пользователя: {{ event.creator.full_name if event.creator else 'Неизвестен' }} ({{ event.creator.email if event.creator else 'неизвестно' }})</p>
-                <p>Дата подачи: {{ event.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                <p>Дата подачи: {{ event.created_at|datetime }}</p>
             </div>
             <div class="card-body">
                 <h4>Информация о месте проведения</h4>
@@ -40,8 +40,8 @@
                     <tbody>
                         {% for session in event.sessions %}
                         <tr>
-                            <td>{{ session.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
-                            <td>{{ session.end_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td>{{ session.start_time|datetime }}</td>
+                            <td>{{ session.end_time|datetime }}</td>
                             <td>{{ session.base_price }}</td>
                         </tr>
                         {% else %}

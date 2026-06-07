@@ -24,7 +24,7 @@
                         {{ {'movie':'Кино','theater':'Театр','concert':'Концерт','sport':'Спорт','exhibition':'Выставка'}[event.category] }}
                     </p>
                     {% if event.next_session %}
-                        <p><strong>Ближайший сеанс:</strong> {{ event.next_session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+                        <p><strong>Ближайший сеанс:</strong> {{ event.next_session.start_time|datetime }}</p>
                         <p><strong>Цена от:</strong> {{ event.next_session.base_price }} руб.</p>
                     {% else %}
                         <p class="text-muted">Нет ближайших сеансов</p>

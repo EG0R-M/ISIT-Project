@@ -5,10 +5,11 @@
     <div class="col-md-6">
         <h2>Оплата билета</h2>
         <p><strong>Мероприятие:</strong> {{ ticket.event.title }}</p>
-        <p><strong>Дата и время:</strong> {{ ticket.session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+        <p><strong>Дата и время:</strong> {{ ticket.session.start_time|datetime }}</p>
         <p><strong>Место:</strong> ряд {{ ticket.seat.row_number }}, место {{ ticket.seat.seat_number }}</p>
-        <p><strong>Сумма:</strong> {{ ticket.price_paid }} руб.</p>
+        <p><strong>Сумма:</strong> {{ ticket.price_paid|number }} руб.</p>
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="alert alert-info">Тестовый режим оплаты</div>
             <button type="submit" class="btn btn-success">Оплатить</button>
             <a href="{{ url_for('profile.bookings') }}" class="btn btn-secondary">Отмена</a>

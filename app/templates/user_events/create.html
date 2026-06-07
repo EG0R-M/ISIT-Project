@@ -12,6 +12,7 @@
         <p class="text-muted">Заполните информацию о месте, мероприятии и сеансах. После отправки всё пройдёт модерацию администратора.</p>
         
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <!-- Место проведения -->
             <div class="card mb-4">
                 <div class="card-header">

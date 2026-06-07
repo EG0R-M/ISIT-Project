@@ -2,7 +2,7 @@
 {% block title %}Выбор мест{% endblock %}
 {% block content %}
 <h2>Выбор мест на {{ session.event.title }}</h2>
-<p class="text-muted">{{ session.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
+<p class="text-muted">{{ session.start_time|datetime }}</p>
 
 <div class="legend mb-3">
     <span class="badge bg-success">Свободно</span>
@@ -11,6 +11,7 @@
 </div>
 
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <table class="seat-map-table">
         {% for row_num, seat_list in rows.items() %}
         <tr>

@@ -7,6 +7,7 @@
         <p class="text-muted">Создайте аккаунт для бронирования билетов</p>
         
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="mb-4">
                 <label class="form-label">Вы собираетесь <span class="text-danger">*</span></label>
                 <div class="d-flex gap-3">
