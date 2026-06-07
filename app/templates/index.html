@@ -7,6 +7,15 @@
     <hr class="my-4">
 </div>
 
+<!-- Блок кнопок категорий -->
+<div class="category-buttons mt-4 d-flex flex-wrap gap-2 justify-content-center">
+    <a href="{{ url_for('events.list_events', category='movie') }}" class="btn btn-outline-primary btn-lg">🎬 Кино</a>
+    <a href="{{ url_for('events.list_events', category='theater') }}" class="btn btn-outline-primary btn-lg">🎭 Театр</a>
+    <a href="{{ url_for('events.list_events', category='sport') }}" class="btn btn-outline-primary btn-lg">🏆 Спорт</a>
+    <a href="{{ url_for('events.list_events', category='concert') }}" class="btn btn-outline-primary btn-lg">🎶 Концерты</a>
+    <a href="{{ url_for('events.list_events', category='exhibition') }}" class="btn btn-outline-primary btn-lg">🖼️ Выставки</a>
+</div>
+
 <!-- Карусель популярных мест -->
 <h2>Популярные места</h2>
 <div class="venues-carousel">
