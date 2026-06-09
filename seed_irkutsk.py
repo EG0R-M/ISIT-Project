@@ -138,7 +138,8 @@ def seed_from_json():
             )
             db.add(event)
             db.flush()
-            events[ed['title']] = event
+            unique_key = f"{ed['title']}|{ed['venue_name']}"
+            events[unique_key] = event
         db.commit()
         print(f"✅ Загружено {len(events)} событий")
 
@@ -146,24 +147,35 @@ def seed_from_json():
         sessions_data = load_json('sessions.json')
         sessions_count = 0
         for sd in sessions_data:
-            event = events.get(sd['event_title'])
+            unique_key = f"{sd['event_title']}|{sd['venue_name']}"
+            event = events.get(unique_key)
             if not event:
                 print(f"⚠️ Событие '{sd['event_title']}' не найдено. Сеанс пропущен.")
                 continue
-            # Берём первый зал этого заведения
-            hall = db.query(Hall).filter_by(venue_id=event.venue_id).first()
-            if not hall:
-                print(f"⚠️ Нет залов для заведения {event.venue.name}, сеанс пропущен.")
-                continue
+            
+            # Ищем зал по названию (если указано) или берём первый
+            hall = None
+            if 'hall_name' in sd and sd['hall_name']:
+                hall = db.query(Hall).filter_by(venue_id=event.venue_id, name=sd['hall_name']).first()
+                if not hall:
+                    print(f"⚠️ Зал '{sd['hall_name']}' не найден для площадки {event.venue.name}. Сеанс пропущен.")
+                    continue
+            else:
+                # Если hall_name не указан, берём первый зал (для обратной совместимости)
+                hall = db.query(Hall).filter_by(venue_id=event.venue_id).first()
+                if not hall:
+                    print(f"⚠️ Нет залов для заведения {event.venue.name}, сеанс пропущен.")
+                    continue
+            
             start = datetime.fromisoformat(sd['start_time'])
-            # Если end_time не указан, вычисляем по длительности события
             if 'end_time' in sd and sd['end_time']:
                 end = datetime.fromisoformat(sd['end_time'])
             else:
                 end = start + timedelta(minutes=event.duration_minutes)
+            
             session = Session(
                 event_id=event.id,
-                hall_id=hall.id,          # <-- добавлена привязка к залу
+                hall_id=hall.id,
                 start_time=start,
                 end_time=end,
                 base_price=sd['base_price'],

@@ -37,9 +37,15 @@
             <ul class="list-group">
                 {% for s in sessions %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ s.start_time|datetime }} — {{ s.end_time|datetime('%H:%M') }}
-                        <span class="badge bg-primary rounded-pill">{{ s.base_price }} руб.</span>
-                        <a href="{{ url_for('bookings.select_seats', session_id=s.id) }}" class="btn btn-sm btn-success">Выбрать места</a>
+                        <div>
+                            <strong>{{ s.start_time|datetime }}</strong> — {{ s.end_time|datetime('%H:%M') }}
+                            <br>
+                            <small class="text-muted">Зал: {{ s.hall.name if s.hall else 'Не указан' }}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-primary rounded-pill me-2">{{ s.base_price }} руб.</span>
+                            <a href="{{ url_for('bookings.select_seats', session_id=s.id) }}" class="btn btn-sm btn-success">Выбрать места</a>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
