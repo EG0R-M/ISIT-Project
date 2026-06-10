@@ -35,4 +35,4 @@ def detail(venue_id):
     # Пытаемся получить ключ из конфига, если нет — передаём None
     yandex_api_key = current_app.config.get('YANDEX_MAPS_API_KEY')
     
-    return render_template('venues/detail.html', venue=venue, events=events, yandex_maps_api_key=yandex_api_key)
+    return render_template('venues/detail.html', venue=venue, events=events, yandex_maps_api_key='6a4d8701-3ffd-4cc5-ba42-237ae0580490')
