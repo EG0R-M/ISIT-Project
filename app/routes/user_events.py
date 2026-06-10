@@ -85,8 +85,28 @@ def create():
         venue_city = request.form.get('venue_city', '').strip()
         
         # Параметры зала
+        hall_name = request.form.get('hall_name', '').strip()
         hall_rows = int(request.form.get('hall_rows', 5))
-        hall_seats_per_row = int(request.form.get('hall_seats_per_row', 10))
+        hall_custom = request.form.get('hall_custom')
+        
+        if hall_custom:
+            custom_seats = request.form.getlist('custom_seats[]')
+            seats_per_row_list = []
+            for i, val in enumerate(custom_seats[:hall_rows]):
+                try:
+                    seats = int(val)
+                    if seats < 1:
+                        seats = 1
+                except (ValueError, TypeError):
+                    seats = 10
+                seats_per_row_list.append(seats)
+            # Добиваем до hall_rows если не хватает
+            while len(seats_per_row_list) < hall_rows:
+                seats_per_row_list.append(10)
+            hall_seats_per_row = max(seats_per_row_list)
+        else:
+            hall_seats_per_row = int(request.form.get('hall_seats_per_row', 10))
+            seats_per_row_list = None
         
         if not venue_name or not venue_city:
             flash('Название заведения и город обязательны.', 'danger')
@@ -107,15 +127,18 @@ def create():
         # ---- Создаём зал и места ----
         hall = Hall(
             venue_id=venue.id,
-            name='Основной зал',
+            name=hall_name or 'Основной зал',
             rows=hall_rows,
             seats_per_row=hall_seats_per_row
         )
         db.add(hall)
         db.flush()
         
-        for row in range(1, hall.rows+1):
-            for seat_num in range(1, hall.seats_per_row+1):
+        total_seats = 0
+        for row in range(1, hall_rows + 1):
+            seats_in_row = seats_per_row_list[row - 1] if seats_per_row_list else hall_seats_per_row
+            total_seats += seats_in_row
+            for seat_num in range(1, seats_in_row + 1):
                 seat_type = 'vip' if row <= 2 else 'standard'
                 seat = Seat(
                     hall_id=hall.id,
@@ -126,7 +149,7 @@ def create():
                 )
                 db.add(seat)
         
-        venue.total_seats = hall.rows * hall.seats_per_row
+        venue.total_seats = total_seats
         
         # ---- Основные данные мероприятия ----
         title = request.form.get('title', '').strip()

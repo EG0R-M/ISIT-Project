@@ -885,6 +885,16 @@ input[type="radio"] {
   box-shadow: 0 4px 16px rgba(139, 58, 74, 0.3);
 }
 
+.seat-label.vip {
+  background: var(--gold);
+  color: var(--dark-brown);
+  box-shadow: 0 2px 8px rgba(212, 168, 83, 0.3);
+}
+
+.seat-label.vip:hover {
+  box-shadow: 0 4px 16px rgba(212, 168, 83, 0.5);
+}
+
 .seat-label.taken {
   background: var(--seat-taken);
   cursor: not-allowed;

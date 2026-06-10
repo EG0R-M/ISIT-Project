@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from flask_login import LoginManager
 from config import Config
 from app.database import close_db
@@ -13,6 +13,12 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Пожалуйста, войдите для доступа.'
+
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        if request.path.startswith('/api/'):
+            return jsonify({'error': 'Требуется авторизация'}), 401
+        return render_template('errors/401.html'), 401
 
     csrf.init_app(app)
 

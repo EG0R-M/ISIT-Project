@@ -34,6 +34,36 @@
                 </div>
             </div>
 
+            <!-- Планировка зала -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">🏟️ Планировка зала</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название зала</label>
+                        <input type="text" name="hall_name" class="form-control" placeholder="Основной зал">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Количество рядов *</label>
+                            <input type="number" name="hall_rows" class="form-control" id="hall-rows" required min="1" value="5">
+                        </div>
+                        <div class="col-md-6 mb-3" id="uniform-seats-wrapper">
+                            <label class="form-label">Количество мест в ряду *</label>
+                            <input type="number" name="hall_seats_per_row" class="form-control" id="hall-seats-per-row" required min="1" value="10">
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="hall-custom" name="hall_custom" value="1">
+                        <label class="form-check-label" for="hall-custom">Кастомный зал — разное количество мест в рядах</label>
+                    </div>
+                    <div id="custom-seats-container" class="custom-seats-container" style="display:none;"></div>
+                    <div class="form-text mb-3">Будет сгенерировано <strong id="total-seats-count">50</strong> мест (ряды × места). Первые 2 ряда — VIP, остальные — Standard.</div>
+                    <div id="hall-preview" class="hall-preview"></div>
+                </div>
+            </div>
+
             <!-- Мероприятие -->
             <div class="card mb-4">
                 <div class="card-header">
