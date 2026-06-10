@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}{{ venue.name }}{% endblock %}
 {% block content %}
+
+{% if venue.image_url %}
+    <img src="{{ venue.image_url }}" 
+         class="img-fluid mb-4 rounded"
+         alt="{{ venue.name }}"
+         style="max-height: 400px; width: 100%; object-fit: cover;">
+{% endif %}
+
 <div class="mb-4">
     <h1>{{ venue.name }}</h1>
     <p><strong>Адрес:</strong> {{ venue.address }}</p>
@@ -15,7 +23,13 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 {% if event.poster_url %}
-                <img src="{{ event.poster_url }}" class="card-img-top" alt="{{ event.title }}">
+                    <img src="{{ event.poster_url }}" 
+                         class="card-img-top event-card-img" 
+                         alt="{{ event.title }}">
+                {% else %}
+                    <div class="event-placeholder">
+                        <span>🎭 {{ event.category }}</span>
+                    </div>
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ event.title }}</h5>

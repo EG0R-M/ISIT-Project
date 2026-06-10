@@ -64,11 +64,12 @@ def seed_from_json():
         venues = {}
         for vd in venues_data:
             venue = Venue(
-                name=vd['name'],
-                address=vd['address'],
-                city=vd['city'],
-                total_seats=0
-            )
+            name=vd['name'],
+            address=vd['address'],
+            city=vd['city'],
+            image_url=vd.get('image_url', ''),  # <-- добавил
+            total_seats=0
+        )
             db.add(venue)
             db.flush()  # получаем id
             venues[vd['name']] = venue

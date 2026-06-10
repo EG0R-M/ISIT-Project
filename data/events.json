@@ -6,7 +6,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 130,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/michael.png"
+        "poster_url": "/static/images/events/movie/michael.avif"
     },
     {
         "title": "История игрушек 5",
@@ -15,7 +15,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 102,
         "age_restriction": 6,
-        "poster_url": "/static/images/events/movie/toystory5.png"
+        "poster_url": "/static/images/events/movie/toystory5.avif"
     },
     {
         "title": "Очень страшное кино 6",
@@ -24,7 +24,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 95,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/scarymovie6.png"
+        "poster_url": "/static/images/events/movie/scarymovie6.avif"
     },
     {
         "title": "Космическая Машка",
@@ -33,7 +33,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 98,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/movie/mashka.png"
+        "poster_url": "/static/images/events/movie/mashka.avif"
     },
     {
         "title": "Грязные деньги",
@@ -42,7 +42,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 98,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/dirtymoney.png"
+        "poster_url": "/static/images/events/movie/dirtymoney.avif"
     },
     {
         "title": "Закулисье реальности",
@@ -51,7 +51,7 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 110,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/thebackrooms.png"
+        "poster_url": "/static/images/events/movie/thebackrooms.avif"
     },
     {
         "title": "День разоблачения",
@@ -60,70 +60,70 @@
         "venue_name": "Кинотеатр 'Баргузин'",
         "duration_minutes": 145,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/movie/disclosureday.png"
+        "poster_url": "/static/images/events/movie/disclosureday.avif"
     },
     {
         "title": "Майкл",
         "description": "Фильм рассказывает о пути Джексона к славе и независимости — от 1960-х, когда восьмилетний Майкл начал выступать в составе семейной музыкальной группы The Jackson 5 вместе со старшими братьями, до поздних 1980-х и одного из самых больших туров за свою карьеру Bad Tour.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 130,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/michael.png"
+        "poster_url": "/static/images/events/movie/michael.avif"
     },
     {
         "title": "История игрушек 5",
         "description": "Однажды родители дарят восьмилетней Бонни планшет в форме лягушки — Лилипад. Девочка увлечена гаджетом и забывает о старых друзьях. Но Базз, Джесси и остальные игрушки решают бороться за внимание своей хозяйки и вызывают на помощь Вуди.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 102,
         "age_restriction": 6,
-        "poster_url": "/static/images/events/movie/toystory5.png"
+        "poster_url": "/static/images/events/movie/toystory5.avif"
     },
     {
         "title": "Очень страшное кино 6",
         "description": "Действие происходит спустя 26 лет после событий первого фильма. Повзрослевшие герои Синди Кэмпбелл, Бренда, Рэй и Мелкий вновь сталкиваются с легендарным убийцей в маске Призрачного лица. На этот раз к ним присоединяется взрослая дочь Синди — Сара. Герои вынуждены объединиться, чтобы вычислить маньяка, который не остановится, пока не уничтожит их всех.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 95,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/scarymovie6.png"
+        "poster_url": "/static/images/events/movie/scarymovie6.avif"
     },
     {
         "title": "Космическая Машка",
         "description": "Машка все свои 11 лет жизни прожила со с отцом-космонавтом на космодроме. Она умеет управлять самолетом, лодкой и отвечать за себя, но не знает как живут ее сверстники. Чтобы обрести товарищей и привыкнуть к земной жизни, девочка отправляется в обычную школу в Петербурге, где и начинается череда её невероятных приключений.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 98,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/movie/mashka.png"
+        "poster_url": "/static/images/events/movie/mashka.avif"
     },
     {
         "title": "Грязные деньги",
         "description": "В одной из испаноязычных стран промышляет нелегальными финансовыми схемами миллиардер по фамилии Салазар. Подозрительные денежные манипуляции богача привлекают внимание секретных служб и опытного адвоката Рэйчел, которая намеревается раскулачить обнаглевшего магната. Для этих целей она привлекает двух лучших оперативников ― спеца по разведке Бронко и мастера по саботажу Сида.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 98,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/dirtymoney.png"
+        "poster_url": "/static/images/events/movie/dirtymoney.avif"
     },
     {
         "title": "Закулисье реальности",
         "description": "У Кларка — магазин дешёвой мебели, куда никто не ходит, но электричество загадочным образом тратится. Он ходит к психологу Мэри Клайн, пытаясь справиться с разрывом с женой. Однажды Кларк находит в стене магазина странный проход и попадает в необычное пространство, похожее на пустой офис, но с искажённой реальностью (мебель свалена в кучу, кресла вросли в пол, знаки отзеркалены). Он решает исследовать это место и исчезает. Спустя время Мэри отправляется на его поиски.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 110,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/thebackrooms.png"
+        "poster_url": "/static/images/events/movie/thebackrooms.avif"
     },
     {
         "title": "День разоблачения",
         "description": "Новая картина режиссера Стивена Спилберга. История о том, как человечество узнаёт о прибытии на Землю инопланетян, чьё существование долгое время тщательно скрывалось.",
         "category": "movie",
-        "venue_name": "Кинотеатр 'Новый'",
+        "venue_name": "Кинотеатр 'New Cinema'",
         "duration_minutes": 145,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/movie/disclosureday.png"
+        "poster_url": "/static/images/events/movie/disclosureday.avif"
     },
     {
         "title": "Майкл",
@@ -132,7 +132,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 130,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/michael.png"
+        "poster_url": "/static/images/events/movie/michael.avif"
     },
     {
         "title": "История игрушек 5",
@@ -141,7 +141,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 102,
         "age_restriction": 6,
-        "poster_url": "/static/images/events/movie/toystory5.png"
+        "poster_url": "/static/images/events/movie/toystory5.avif"
     },
     {
         "title": "Очень страшное кино 6",
@@ -150,7 +150,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 95,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/scarymovie6.png"
+        "poster_url": "/static/images/events/movie/scarymovie6.avif"
     },
     {
         "title": "Космическая Машка",
@@ -159,7 +159,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 98,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/movie/mashka.png"
+        "poster_url": "/static/images/events/movie/mashka.avif"
     },
     {
         "title": "Грязные деньги",
@@ -168,7 +168,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 98,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/dirtymoney.png"
+        "poster_url": "/static/images/events/movie/dirtymoney.avif"
     },
     {
         "title": "Закулисье реальности",
@@ -177,7 +177,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 110,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/movie/thebackrooms.png"
+        "poster_url": "/static/images/events/movie/thebackrooms.avif"
     },
     {
         "title": "День разоблачения",
@@ -186,7 +186,7 @@
         "venue_name": "Кинотеатр 'Киномакс'",
         "duration_minutes": 145,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/movie/disclosureday.png"
+        "poster_url": "/static/images/events/movie/disclosureday.avif"
     },
     {
         "title": "Сказка о Золотой рыбке - ТЮЗ им. А. Вампилова",
@@ -195,7 +195,7 @@
         "venue_name": "ТЮЗ им. А. Вампилова",
         "duration_minutes": 70,
         "age_restriction": 0,
-        "poster_url": "/static/images/events/teatr/fish.jpg"
+        "poster_url": "/static/images/events/teatr/fish.avif"
     },
     {
         "title": "Любовь и голуби - Драматический театр им. Н.П. Охлопкова",
@@ -204,7 +204,7 @@
         "venue_name": "Драматический театр им. Н.П. Охлопкова",
         "duration_minutes": 135,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/teatr/lovepigeons.jpg"
+        "poster_url": "/static/images/events/teatr/lovepigeons.avif"
     },
     {
         "title": "Живи и помни - Драматический театр им. Н.П. Охлопкова",
@@ -213,7 +213,7 @@
         "venue_name": "Драматический театр им. Н.П. Охлопкова",
         "duration_minutes": 150,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/teatr/live_and_remember.png"
+        "poster_url": "/static/images/events/teatr/live_and_remember.avif"
     },
     {
         "title": "Три сестры - Драматический театр им. Н.П. Охлопкова",
@@ -222,7 +222,7 @@
         "venue_name": "Драматический театр им. Н.П. Охлопкова",
         "duration_minutes": 180,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/teatr/three_sisters.png"
+        "poster_url": "/static/images/events/teatr/three_sisters.avif"
     },
     {
         "title": "Остров сокровищ - Театр кукол «Аистёнок»",
@@ -231,7 +231,7 @@
         "venue_name": "Театр кукол «Аистёнок»",
         "duration_minutes": 60,
         "age_restriction": 0,
-        "poster_url": "/static/images/events/teatr/treasure_island.jpg"
+        "poster_url": "/static/images/events/teatr/treasure_island.avif"
     },
     {
         "title": "Ищите женщину - Музыкальный театр им. Н.М. Загурского",
@@ -240,7 +240,7 @@
         "venue_name": "Музыкальный театр им. Н.М. Загурского",
         "duration_minutes": 110,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/teatr/find_woman.png"
+        "poster_url": "/static/images/events/teatr/find_woman.avif"
     },
     {
         "title": "Другая жизнь - Музыкальный театр им. Н.М. Загурского",
@@ -249,7 +249,7 @@
         "venue_name": "Музыкальный театр им. Н.М. Загурского",
         "duration_minutes": 125,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/teatr/another_life.png"
+        "poster_url": "/static/images/events/teatr/another_life.avif"
     },
     {
         "title": "Кошкин дом - ТЮЗ им. А. Вампилова",
@@ -258,7 +258,7 @@
         "venue_name": "ТЮЗ им. А. Вампилова",
         "duration_minutes": 55,
         "age_restriction": 0,
-        "poster_url": "/static/images/events/teatr/cats_house.png"
+        "poster_url": "/static/images/events/teatr/cats_house.avif"
     },
     {
         "title": "Ночь в «Рок-баре». Группа «Контрабанда» - Рок-бар, бар-ресторан",
@@ -267,7 +267,7 @@
         "venue_name": "Рок-бар, бар-ресторан",
         "duration_minutes": 120,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/concert/contrabanda_pub.png"
+        "poster_url": "/static/images/events/concert/contrabanda_pub.avif"
     },
     {
         "title": "АК-47 - Концерт-холл)",
@@ -276,7 +276,7 @@
         "venue_name": "Концерт-холл (ex. «Дикая лошадь»)",
         "duration_minutes": 110,
         "age_restriction": 16,
-        "poster_url": "/static/images/events/concert/ak47.png"
+        "poster_url": "/static/images/events/concert/ak47.avif"
     },
     {
         "title": "Группа «Контрабанда» в Harat's Pub в 130-м квартале - Harat's Pub в 130-м квартале",
@@ -285,7 +285,7 @@
         "venue_name": "Harat's Pub в 130-м квартале",
         "duration_minutes": 100,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/concert/contrabanda_pub.png"
+        "poster_url": "/static/images/events/concert/contrabanda_pub.avif"
     },
     {
         "title": "Любэ - Труд",
@@ -294,7 +294,7 @@
         "venue_name": "Труд",
         "duration_minutes": 140,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/concert/lube.jpg"
+        "poster_url": "/static/images/events/concert/lube.avif"
     },
     {
         "title": "Icegergert - Концерт-холл (ex. «Дикая лошадь»)",
@@ -303,7 +303,7 @@
         "venue_name": "Концерт-холл (ex. «Дикая лошадь»)",
         "duration_minutes": 150,
         "age_restriction": 18,
-        "poster_url": "/static/images/events/concert/icegergert.png"
+        "poster_url": "/static/images/events/concert/icegergert.avif"
     },
     {
         "title": "Арт-столы народов России - Площадь у памятника Александру Третьему",
@@ -312,7 +312,7 @@
         "venue_name": "Площадь у памятника Александру Третьему",
         "duration_minutes": 480,
         "age_restriction": 0,
-        "poster_url": "/static/images/events/vistavka/art_tables.png"
+        "poster_url": "/static/images/events/vistavka/art_tables.avif"
     },
     {
         "title": "Безграничные возможности - Дом ремесел",
@@ -321,7 +321,7 @@
         "venue_name": "Дом ремесел",
         "duration_minutes": 360,
         "age_restriction": 0,
-        "poster_url": "/static/images/events/vistavka/unlimited.png"
+        "poster_url": "/static/images/events/vistavka/unlimited.avif"
     },
     {
         "title": "Выставка арт-галереи «Заборчик» в сквере Кирова - Сквер Кирова",
@@ -330,7 +330,7 @@
         "venue_name": "Сквер Кирова",
         "duration_minutes": 420,
         "age_restriction": 6,
-        "poster_url": "/static/images/events/vistavka/zaborchik.jpg"
+        "poster_url": "/static/images/events/vistavka/zaborchik.avif"
     },
     {
         "title": "Сервико Иркутский марафон 2026 - Площадь у памятника Александру Третьему",
@@ -339,7 +339,7 @@
         "venue_name": "Площадь у памятника Александру Третьему",
         "duration_minutes": 720,
         "age_restriction": 6,
-        "poster_url": "/static/images/events/sport/marathon.png"
+        "poster_url": "/static/images/events/sport/marathon.avif"
     },
     {
         "title": "Вызов Сибири 2026. Открытый Кубок России по многоборью ГТО - Труд",
@@ -348,6 +348,6 @@
         "venue_name": "Труд",
         "duration_minutes": 540,
         "age_restriction": 12,
-        "poster_url": "/static/images/events/sport/gto_cup.jpg"
+        "poster_url": "/static/images/events/sport/gto_cup.avif"
     }
 ]

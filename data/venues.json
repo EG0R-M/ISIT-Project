@@ -3,15 +3,17 @@
     "name": "Кинотеатр 'Баргузин'",
     "address": "ул. Байкальская, 107",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/barguzin.avif",
     "halls": [
-    { "name": "Зал 1", "rows": 14, "seats_per_row": 13 },
-    { "name": "Зал 2", "rows": 8, "seats_per_row": 10 }
-  ]
+      { "name": "Зал 1", "rows": 14, "seats_per_row": 13 },
+      { "name": "Зал 2", "rows": 8, "seats_per_row": 10 }
+    ]
   },
   {
     "name": "Кинотеатр 'Новый'",
     "address": "ул. Советская, 58/1, МТЦ «Новый»",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/novyy.avif",
     "halls": [
       { "name": "Зал 1", "rows": 10, "seats_per_row": 15 }
     ]
@@ -20,6 +22,7 @@
     "name": "Кинотеатр 'Киномакс'",
     "address": "ул. Сергеева 3/5, ТРЦ “Сильвер Молл”",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/kinomaks.avif",
     "halls": [
       { "name": "Зал 1", "rows": 11, "seats_per_row": 17 }
     ]
@@ -28,6 +31,7 @@
     "name": "Ледовый дворец 'Байкал'",
     "address": "ул. Лермонтова, 249",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/ledoviy_baykal.avif",
     "halls": [
       { "name": "Основная арена", "rows": 25, "seats_per_row": 30 }
     ]
@@ -36,6 +40,7 @@
     "name": "ТЮЗ им. А. Вампилова",
     "address": "ул. Ленина, 23",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/tyuz_vampilova.avif",
     "halls": [
       { "name": "Основная сцена", "rows": 12, "seats_per_row": 18 }
     ]
@@ -44,6 +49,7 @@
     "name": "Драматический театр им. Н.П. Охлопкова",
     "address": "ул. Карла Маркса, 14",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/dramteatr_ohlopkova.avif",
     "halls": [
       { "name": "Большая сцена", "rows": 20, "seats_per_row": 25 },
       { "name": "Малая сцена", "rows": 8, "seats_per_row": 12 }
@@ -53,6 +59,7 @@
     "name": "Театр кукол «Аистёнок»",
     "address": "ул. Байкальская, 32",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/aistenok.avif",
     "halls": [
       { "name": "Зрительный зал", "rows": 10, "seats_per_row": 12 }
     ]
@@ -61,6 +68,7 @@
     "name": "Музыкальный театр им. Н.М. Загурского",
     "address": "ул. Седова, 29",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/muzteatr_zagurskogo.avif",
     "halls": [
       { "name": "Основной зал", "rows": 18, "seats_per_row": 24 }
     ]
@@ -69,14 +77,16 @@
     "name": "Рок-бар, бар-ресторан",
     "address": "ул. Советская, 176Б",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/rok_bar.avif",
     "halls": [
       { "name": "Концертная площадка", "rows": 5, "seats_per_row": 10 }
     ]
   },
   {
-    "name": "Концерт-холл",
+    "name": "Концерт-холл (ex. «Дикая лошадь»)",
     "address": "ул. Якоби, 35",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/koncert_holl.avif",
     "halls": [
       { "name": "Большой зал", "rows": 30, "seats_per_row": 25 }
     ]
@@ -85,6 +95,7 @@
     "name": "Harat's Pub в 130-м квартале",
     "address": "ул. Седова 2а",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/harats_pub.avif",
     "halls": [
       { "name": "Барная зона", "rows": 6, "seats_per_row": 8 }
     ]
@@ -93,6 +104,7 @@
     "name": "Труд",
     "address": "ул. Ленина, 48",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/trud.avif",
     "halls": [
       { "name": "Стадион", "rows": 50, "seats_per_row": 30 }
     ]
@@ -101,6 +113,7 @@
     "name": "Площадь у памятника Александру Третьему",
     "address": "бульвар Гагарина, набережная",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/ploshad_tretiy.avif",
     "halls": [
       { "name": "Открытая площадка", "rows": 0, "seats_per_row": 0 }
     ]
@@ -109,6 +122,7 @@
     "name": "Дом ремесел",
     "address": "ул. Франк-Каменецкого, 16б",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/dom_remesel.avif",
     "halls": [
       { "name": "Выставочный зал", "rows": 0, "seats_per_row": 0 }
     ]
@@ -117,6 +131,7 @@
     "name": "Сквер Кирова",
     "address": "ул. Сухэ-Батора",
     "city": "Иркутск",
+    "image_url": "/static/images/venues/skver_kirova.avif",
     "halls": [
       { "name": "Открытая площадка", "rows": 0, "seats_per_row": 0 }
     ]

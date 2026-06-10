@@ -4,11 +4,16 @@
 <h1>Все заведения</h1>
 <div class="row">
     {% for venue in venues %}
-    <div class="col-md-4 mb-3">
-        <div class="card">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% set default_image = url_for('static', filename='images/venues/default.jpg') %}
+            <img src="{{ venue.image_url or default_image }}" 
+                 class="card-img-top venue-card-img" 
+                 alt="{{ venue.name }}"
+                 onerror="this.src='{{ default_image }}'">
             <div class="card-body">
                 <h5 class="card-title">{{ venue.name }}</h5>
-                <p class="card-text">{{ venue.city }}, {{ venue.address }}</p>
+                <p class="card-text">{{ venue.city }}, {{ venue.address[:100] }}{% if venue.address|length > 100 %}...{% endif %}</p>
                 <a href="/venues/{{ venue.id }}" class="btn btn-sm btn-primary">Подробнее</a>
             </div>
         </div>

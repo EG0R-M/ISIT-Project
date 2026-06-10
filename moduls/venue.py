@@ -11,6 +11,7 @@ class Venue(Base):
     address = Column(Text, nullable=False)
     city = Column(String(100), nullable=False)
     description = Column(Text)
+    image_url = Column(String(500), nullable=True)
     total_seats = Column(Integer, default=0)
     created_at = Column(DateTime, server_default=func.now())
     

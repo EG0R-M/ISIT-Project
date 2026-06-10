@@ -10,6 +10,10 @@ from datetime import datetime, timedelta
 
 api_venues_bp = Blueprint('api_venues', 'name', url_prefix='/api/venues')
 
+def slugify_venue_name(name):
+    """Преобразует название заведения в имя файла"""
+    return name.replace(' ', '_').replace("'", '').replace('«', '').replace('»', '')
+
 @api_venues_bp.route('/popular', methods=['GET'])
 def get_popular_venues():
     db = get_db()
@@ -31,7 +35,7 @@ def get_popular_venues():
                 'name': venue.name,
                 'city': venue.city,
                 'rating': 50,  # базовый рейтинг для отображения
-                'image_url': f"https://via.placeholder.com/800x400?text={venue.name.replace(' ', '+')}"
+                'image_url': venue.image_url or '/static/images/venues/default.jpg'
             })
         return jsonify(result)
     
@@ -73,12 +77,12 @@ def get_popular_venues():
         # Включаем все заведения с ненулевым рейтингом или хотя бы с событием
         if rating > 0 or sales > 0 or avg_rating > 0:
             result.append({
-                'id': venue.id,
-                'name': venue.name,
-                'city': venue.city,
-                'rating': rating,
-                'image_url': f"https://via.placeholder.com/800x400?text={venue.name.replace(' ', '+')}"
-            })
+            'id': venue.id,
+            'name': venue.name,
+            'city': venue.city,
+            'rating': rating,
+            'image_url': venue.image_url or '/static/images/venues/default.jpg'
+        })
 
     result.sort(key=lambda x: x['rating'], reverse=True)
     return jsonify(result[:10])
