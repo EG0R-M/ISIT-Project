@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.database import get_db
+from app.forms import AdminEventForm
 from moduls.user import User
 from moduls.event import Event, EventStatus
 from moduls.venue import Venue
@@ -37,33 +38,25 @@ def add_event():
     if current_user.role != 'admin':
         return "Доступ запрещён", 403
     db = get_db()
-    venues = db.query(Venue).all()
-    
-    if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
-        category = request.form['category']
-        venue_id = request.form['venue_id']
-        duration_minutes = int(request.form['duration_minutes'])
-        age_restriction = int(request.form['age_restriction'])
-        poster_url = request.form.get('poster_url')
-        
+    form = AdminEventForm()
+    form.venue_id.choices = [(v.id, f'{v.name} ({v.city})') for v in db.query(Venue).all()]
+
+    if form.validate_on_submit():
         event = Event(
-            title=title,
-            description=description,
-            category=category,
-            venue_id=venue_id,
-            duration_minutes=duration_minutes,
-            age_restriction=age_restriction,
-            poster_url=poster_url
+            title=form.title.data,
+            description=form.description.data,
+            category=form.category.data,
+            venue_id=form.venue_id.data,
+            duration_minutes=form.duration_minutes.data,
+            age_restriction=form.age_restriction.data,
+            poster_url=form.poster_url.data
         )
         db.add(event)
         db.commit()
         flash('Мероприятие добавлено!', 'success')
         return redirect(url_for('admin.events'))
-    
-    categories = ['movie', 'theater', 'concert', 'sport', 'exhibition']
-    return render_template('admin/add_event.html', venues=venues, categories=categories)
+
+    return render_template('admin/add_event.html', form=form)
 
 @bp.route('/events/edit/<int:event_id>', methods=['GET', 'POST'])
 @login_required
@@ -75,23 +68,17 @@ def edit_event(event_id):
     if not event:
         flash('Мероприятие не найдено', 'danger')
         return redirect(url_for('admin.events'))
-    
-    venues = db.query(Venue).all()
-    
-    if request.method == 'POST':
-        event.title = request.form['title']
-        event.description = request.form['description']
-        event.category = request.form['category']
-        event.venue_id = request.form['venue_id']
-        event.duration_minutes = int(request.form['duration_minutes'])
-        event.age_restriction = int(request.form['age_restriction'])
-        event.poster_url = request.form.get('poster_url')
+
+    form = AdminEventForm(obj=event)
+    form.venue_id.choices = [(v.id, f'{v.name} ({v.city})') for v in db.query(Venue).all()]
+
+    if form.validate_on_submit():
+        form.populate_obj(event)
         db.commit()
         flash('Мероприятие обновлено!', 'success')
         return redirect(url_for('admin.events'))
-    
-    categories = ['movie', 'theater', 'concert', 'sport', 'exhibition']
-    return render_template('admin/edit_event.html', event=event, venues=venues, categories=categories)
+
+    return render_template('admin/edit_event.html', form=form, event=event)
 
 @bp.route('/events/delete/<int:event_id>')
 @login_required

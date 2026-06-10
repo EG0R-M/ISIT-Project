@@ -7,22 +7,22 @@
     <div class="card-body">
         <h5>Оставить отзыв</h5>
         <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <label>Оценка (1-5)</label>
-                <select name="rating" class="form-select">
-                    <option value="5">5 - Отлично</option>
-                    <option value="4">4 - Хорошо</option>
-                    <option value="3">3 - Средне</option>
-                    <option value="2">2 - Плохо</option>
-                    <option value="1">1 - Ужасно</option>
-                </select>
+                {{ form.rating.label(class="form-label") }}
+                {{ form.rating(class="form-select") }}
+                {% for error in form.rating.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             <div class="mb-3">
-                <label>Комментарий</label>
-                <textarea name="comment" class="form-control" rows="3"></textarea>
+                {{ form.comment.label(class="form-label") }}
+                {{ form.comment(class="form-control", rows="3") }}
+                {% for error in form.comment.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary">Отправить</button>
+            {{ form.submit(class="btn btn-primary") }}
         </form>
     </div>
 </div>
