@@ -7,71 +7,73 @@
         <p class="text-muted">Создайте аккаунт для бронирования билетов</p>
         
         <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ form.hidden_tag() }}
+
             <div class="mb-4">
                 <label class="form-label">Вы собираетесь <span class="text-danger">*</span></label>
                 <div class="d-flex gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="roleBuyer" value="user" checked>
-                        <label class="form-check-label" for="roleBuyer">
-                            🎫 Покупать билеты
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="roleOrganizer" value="organizer">
-                        <label class="form-check-label" for="roleOrganizer">
-                            🎪 Организовывать мероприятия
-                        </label>
-                    </div>
+                    {% for subfield in form.role %}
+                        <div class="form-check">
+                            {{ subfield(class="form-check-input") }}
+                            {{ subfield.label(class="form-check-label") }}
+                        </div>
+                    {% endfor %}
                 </div>
                 <div class="form-text">Вы сможете изменить тип аккаунта позже в профиле</div>
+                {% for error in form.role.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">
-                    Email <span class="text-danger">*</span>
-                </label>
-                <input type="email" name="email" id="email" class="form-control" 
-                       placeholder="example@mail.com" required>
+                {{ form.email.label(class="form-label") }}
+                <span class="text-danger">*</span>
+                {{ form.email(class="form-control", placeholder="example@mail.com") }}
                 <div class="form-text">Введите действующий email</div>
+                {% for error in form.email.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             
             <div class="mb-3">
-                <label for="full_name" class="form-label">
-                    Полное имя <span class="text-danger">*</span>
-                </label>
-                <input type="text" name="full_name" id="full_name" class="form-control" 
-                       placeholder="Иванов Иван Иванович" required>
+                {{ form.full_name.label(class="form-label") }}
+                <span class="text-danger">*</span>
+                {{ form.full_name(class="form-control", placeholder="Иванов Иван Иванович") }}
+                {% for error in form.full_name.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             
             <div class="mb-3">
-                <label for="phone" class="form-label">
-                    Телефон 
-                    <span class="text-muted">(необязательно)</span>
-                </label>
-                <input type="tel" name="phone" id="phone" class="form-control" 
-                       placeholder="+7 (999) 123-45-67" oninput="formatPhone(this)">
+                {{ form.phone.label(class="form-label") }}
+                <span class="text-muted">(необязательно)</span>
+                {{ form.phone(class="form-control", placeholder="+7 (999) 123-45-67", oninput="formatPhone(this)") }}
                 <div class="form-text">Для связи с вами по вопросам бронирования</div>
+                {% for error in form.phone.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             
             <div class="mb-3">
-                <label for="password" class="form-label">
-                    Пароль <span class="text-danger">*</span>
-                </label>
-                <input type="password" name="password" id="password" class="form-control" 
-                       placeholder="Минимум 6 символов" required minlength="6">
+                {{ form.password.label(class="form-label") }}
+                <span class="text-danger">*</span>
+                {{ form.password(class="form-control", placeholder="Минимум 6 символов") }}
                 <div class="form-text">Пароль должен содержать не менее 6 символов</div>
+                {% for error in form.password.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             
             <div class="mb-3">
-                <label for="confirm_password" class="form-label">
-                    Подтверждение пароля <span class="text-danger">*</span>
-                </label>
-                <input type="password" name="confirm_password" id="confirm_password" 
-                       class="form-control" placeholder="Повторите пароль" required>
+                {{ form.confirm_password.label(class="form-label") }}
+                <span class="text-danger">*</span>
+                {{ form.confirm_password(class="form-control", placeholder="Повторите пароль") }}
+                {% for error in form.confirm_password.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
             </div>
             
-            <button type="submit" class="btn btn-primary w-100 mb-3">Зарегистрироваться</button>
+            {{ form.submit(class="btn btn-primary w-100 mb-3") }}
             
             <div class="text-center">
                 <p class="mb-0">Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войдите</a></p>

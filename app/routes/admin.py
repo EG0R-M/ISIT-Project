@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.database import get_db
 from moduls.user import User
-from moduls.event import Event
+from moduls.event import Event, EventStatus
 from moduls.venue import Venue
 from moduls.ticket import Ticket
 
@@ -130,8 +130,6 @@ def toggle_user(user_id):
         status = "разблокирован" if user.is_active else "заблокирован"
         flash(f'Пользователь {user.email} {status}', 'success')
     return redirect(url_for('admin.users'))
-
-from moduls.event import EventStatus   # убедитесь, что импортирован
 
 @bp.route('/events/pending')
 @login_required

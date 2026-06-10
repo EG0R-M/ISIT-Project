@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.database import get_db
+from app.forms import RegistrationForm, LoginForm
 from moduls.user import User
 
 bp = Blueprint('auth', __name__)
@@ -10,62 +11,45 @@ bp = Blueprint('auth', __name__)
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        email = request.form['email']
-        full_name = request.form['full_name']
-        phone = request.form['phone']
-        password = request.form['password']
-        confirm = request.form['confirm_password']
-        role = request.form.get('role', 'user')
-        
-        if role not in ('user', 'organizer'):
-            role = 'user'
-        
-        if password != confirm:
-            flash('Пароли не совпадают.', 'danger')
-            return render_template('auth/register.html')
-        
+
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
         db = get_db()
-        existing = db.query(User).filter_by(email=email).first()
-        if existing:
-            flash('Email уже зарегистрирован.', 'danger')
-            return render_template('auth/register.html')
-        
-        hashed = generate_password_hash(password)
+        hashed = generate_password_hash(form.password.data)
         new_user = User(
-            email=email,
-            full_name=full_name,
-            phone=phone,
+            email=form.email.data,
+            full_name=form.full_name.data,
+            phone=form.phone.data,
             password_hash=hashed,
-            role=role
+            role=form.role.data
         )
         db.add(new_user)
         db.commit()
         flash('Регистрация успешна! Теперь войдите.', 'success')
         return redirect(url_for('auth.login'))
-    
-    return render_template('auth/register.html')
+
+    return render_template('auth/register.html', form=form)
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
         db = get_db()
-        user = db.query(User).filter_by(email=email).first()
-        if user and check_password_hash(user.password_hash, password):
+        user = db.query(User).filter_by(email=form.email.data).first()
+        if user and check_password_hash(user.password_hash, form.password.data):
             login_user(user)
             next_page = request.args.get('next')
             flash(f'Добро пожаловать, {user.full_name}!', 'success')
             return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
             flash('Неверный email или пароль.', 'danger')
-    
-    return render_template('auth/login.html')
+
+    return render_template('auth/login.html', form=form)
 
 @bp.route('/logout')
 @login_required

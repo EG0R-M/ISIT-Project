@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Неверный запрос{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-1">400</h1>
+    <h2 class="mb-4">Неверный запрос</h2>
+    <p class="text-muted mb-4">Запрос содержит некорректные данные. Проверьте введённую информацию.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться на главную</a>
+</div>
+{% endblock %}

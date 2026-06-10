@@ -7,10 +7,11 @@ from moduls.seat import Seat
 from moduls.ticket import Ticket
 from moduls.review import Review
 from moduls.payment import Payment
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 
 from app.routes.weather import get_weather
+from app.extensions import csrf
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -47,6 +48,7 @@ def api_available_seats(session_id):
     return jsonify(result)
 
 @bp.route('/bookings', methods=['POST'])
+@csrf.exempt
 @login_required
 def api_create_booking():
     data = request.get_json()
@@ -79,6 +81,7 @@ def api_booking_status(ticket_id):
     return jsonify({'id': ticket.id, 'status': ticket.status, 'price': float(ticket.price_paid)})
 
 @bp.route('/bookings/<int:ticket_id>', methods=['DELETE'])
+@csrf.exempt
 @login_required
 def api_cancel_booking(ticket_id):
     db = get_db()
@@ -92,6 +95,7 @@ def api_cancel_booking(ticket_id):
     return jsonify({'message': 'Cancelled'})
 
 @bp.route('/payments', methods=['POST'])
+@csrf.exempt
 @login_required
 def api_payment():
     data = request.get_json()
@@ -120,6 +124,7 @@ def api_reviews():
     return jsonify([{'id': r.id, 'rating': r.rating, 'comment': r.comment, 'user': r.user.full_name} for r in reviews])
 
 @bp.route('/reviews', methods=['POST'])
+@csrf.exempt
 @login_required
 def api_create_review():
     data = request.get_json()

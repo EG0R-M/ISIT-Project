@@ -1,11 +1,10 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
 from config import Config
 from app.database import close_db
+from app.extensions import csrf
 
 login_manager = LoginManager()
-csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -48,6 +47,14 @@ def create_app():
     @app.errorhandler(403)
     def forbidden(e):
         return render_template('errors/403.html'), 403
+
+    @app.errorhandler(400)
+    def bad_request(e):
+        return render_template('errors/400.html'), 400
+
+    @app.errorhandler(401)
+    def unauthorized(e):
+        return render_template('errors/401.html'), 401
 
     @app.errorhandler(500)
     def server_error(e):
