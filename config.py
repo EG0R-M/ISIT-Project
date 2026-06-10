@@ -1,9 +1,10 @@
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 
-# Загружаем .env из корня проекта (явно указываем путь)
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+# Принудительно загружаем .env
+env_path = Path(__file__).parent / '.env'
+load_dotenv(dotenv_path=env_path)
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
@@ -11,3 +12,8 @@ class Config:
     
     OPENWEATHER_API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
     WEATHER_CITY = os.environ.get('WEATHER_CITY', 'Irkutsk')
+    
+    YANDEX_MAPS_API_KEY = os.environ.get('YANDEX_MAPS_API_KEY', '')
+    
+    # Отладка
+    print(f"DEBUG: YANDEX_MAPS_API_KEY from env = {YANDEX_MAPS_API_KEY}")

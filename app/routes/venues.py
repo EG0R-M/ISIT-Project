@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, current_app
 from app.database import get_db
 from moduls.venue import Venue
 from moduls.event import Event
@@ -32,4 +32,7 @@ def detail(venue_id):
         ).order_by(Session.start_time).first()
         event.next_session = next_session
     
-    return render_template('venues/detail.html', venue=venue, events=events)
+    # Пытаемся получить ключ из конфига, если нет — передаём None
+    yandex_api_key = current_app.config.get('YANDEX_MAPS_API_KEY')
+    
+    return render_template('venues/detail.html', venue=venue, events=events, yandex_maps_api_key=yandex_api_key)

@@ -9,11 +9,21 @@
          style="max-height: 400px; width: 100%; object-fit: cover;">
 {% endif %}
 
-<div class="mb-4">
-    <h1>{{ venue.name }}</h1>
-    <p><strong>Адрес:</strong> {{ venue.address }}</p>
-    <p><strong>Город:</strong> {{ venue.city }}</p>
-    <p><strong>Вместимость:</strong> {{ venue.total_seats }} мест</p>
+<div class="row">
+    <!-- Левая колонка: информация о заведении -->
+    <div class="col-md-6">
+        <div class="mb-4">
+            <h1>{{ venue.name }}</h1>
+            <p><strong>Адрес:</strong> {{ venue.address }}</p>
+            <p><strong>Город:</strong> {{ venue.city }}</p>
+            <p><strong>Вместимость:</strong> {{ venue.total_seats }} мест</p>
+        </div>
+    </div>
+    
+    <!-- Правая колонка: карта -->
+    <div class="col-md-6">
+        <div id="venue-map" style="height: 300px; border-radius: 12px; margin-bottom: 1.5rem;"></div>
+    </div>
 </div>
 
 <h3>Мероприятия в этом заведении</h3>
@@ -54,4 +64,15 @@
 {% endif %}
 
 <a href="{{ url_for('venues.list_venues') }}" class="btn btn-secondary">← Назад к списку заведений</a>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% if yandex_maps_api_key %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_maps_api_key }}&lang=ru_RU"></script>
+<script src="{{ url_for('static', filename='js/venue_map.js') }}"></script>
+<script>
+    initVenueMap("{{ venue.name }}", "{{ venue.address }}");
+</script>
+{% endif %}
 {% endblock %}
