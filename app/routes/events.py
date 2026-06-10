@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from app.database import get_db
+from app.forms import ReviewForm
 from moduls.favorite import Favorite
 from moduls.event import Event, EventStatus
 from moduls.session import Session
@@ -182,13 +183,14 @@ def reviews(event_id):
     if not event:
         return "Событие не найдено", 404
 
-    # Проверка статуса (только одобренные события могут иметь отзывы)
     if not (current_user.is_authenticated and current_user.role == 'admin'):
         if event.status != EventStatus.APPROVED:
             flash('Мероприятие недоступно.', 'warning')
             return redirect(url_for('events.list_events'))
 
-    if request.method == 'POST' and current_user.is_authenticated:
+    form = ReviewForm()
+
+    if form.validate_on_submit() and current_user.is_authenticated:
         has_ticket = db.query(Ticket).filter(
             Ticket.user_id == current_user.id,
             Ticket.session.has(event_id=event_id),
@@ -211,19 +213,16 @@ def reviews(event_id):
             flash('Вы можете оставить отзыв только после того, как мероприятие прошло.', 'warning')
             return redirect(url_for('events.reviews', event_id=event_id))
 
-        rating = int(request.form['rating'])
-        comment = request.form['comment']
-
         existing = db.query(Review).filter_by(user_id=current_user.id, event_id=event_id).first()
         if existing:
             flash('Вы уже оставили отзыв на это событие.', 'warning')
         else:
             review = Review(user_id=current_user.id, event_id=event_id,
-                            rating=rating, comment=comment, is_verified=True)
+                            rating=form.rating.data, comment=form.comment.data, is_verified=True)
             db.add(review)
             db.commit()
             flash('Спасибо за отзыв!', 'success')
         return redirect(url_for('events.reviews', event_id=event_id))
 
     reviews_list = db.query(Review).filter_by(event_id=event_id).order_by(Review.created_at.desc()).all()
-    return render_template('events/reviews.html', event=event, reviews=reviews_list)
+    return render_template('events/reviews.html', form=form, event=event, reviews=reviews_list)

@@ -6,58 +6,67 @@
         <h2>Редактирование профиля</h2>
         
         <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <!-- Основная информация -->
+            {{ form.hidden_tag() }}
+
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">Основная информация</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="full_name" class="form-label">Полное имя *</label>
-                        <input type="text" name="full_name" id="full_name" class="form-control" 
-                               value="{{ user.full_name }}" required>
+                        {{ form.full_name.label(class="form-label") }} *
+                        {{ form.full_name(class="form-control") }}
+                        {% for error in form.full_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label class="form-label">Email</label>
                         <input type="email" class="form-control" value="{{ user.email }}" disabled>
                         <small class="text-muted">Email нельзя изменить</small>
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Телефон</label>
-                        <input type="text" name="phone" id="phone" class="form-control" 
-                               value="{{ user.phone or '' }}">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control") }}
                         <small class="text-muted">Необязательное поле</small>
+                        {% for error in form.phone.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
             
-            <!-- Смена пароля -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">Смена пароля</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="current_password" class="form-label">Текущий пароль</label>
-                        <input type="password" name="current_password" id="current_password" class="form-control">
+                        {{ form.current_password.label(class="form-label") }}
+                        {{ form.current_password(class="form-control") }}
                         <small class="text-muted">Оставьте пустым, если не хотите менять пароль</small>
                     </div>
                     <div class="mb-3">
-                        <label for="new_password" class="form-label">Новый пароль</label>
-                        <input type="password" name="new_password" id="new_password" class="form-control">
+                        {{ form.new_password.label(class="form-label") }}
+                        {{ form.new_password(class="form-control") }}
                         <small class="text-muted">Минимум 6 символов</small>
+                        {% for error in form.new_password.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
                     </div>
                     <div class="mb-3">
-                        <label for="confirm_password" class="form-label">Подтверждение нового пароля</label>
-                        <input type="password" name="confirm_password" id="confirm_password" class="form-control">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control") }}
+                        {% for error in form.confirm_password.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
             
             <div class="d-flex justify-content-between">
                 <a href="{{ url_for('profile.dashboard') }}" class="btn btn-secondary">Отмена</a>
-                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                {{ form.submit(class="btn btn-primary") }}
             </div>
         </form>
     </div>

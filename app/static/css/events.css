@@ -32,3 +32,91 @@
     font-weight: 500;
     margin-top: 5px;
 }
+
+/* Hall preview */
+.hall-preview {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(255, 248, 240, 0.03);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    overflow-x: auto;
+}
+
+.hall-preview .seat-map-table {
+    margin-top: 0;
+}
+
+.hall-preview .seat-map-table td {
+    padding: 3px;
+}
+
+.hall-preview .seat-label {
+    cursor: default;
+}
+
+.hall-preview .seat-label:hover {
+    transform: none;
+}
+
+/* Custom seats per row */
+.custom-seats-container {
+    margin-bottom: 12px;
+}
+
+.custom-seats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+}
+
+.custom-seats-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 248, 240, 0.03);
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.custom-seats-label {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    min-width: 46px;
+}
+
+.custom-seats-input {
+    width: 70px !important;
+    text-align: center;
+    padding: 4px 8px !important;
+}
+
+.custom-seats-unit {
+    font-size: 0.78em;
+    color: var(--text-muted);
+}
+
+.form-check-input {
+    accent-color: var(--burgundy);
+}
+
+.form-check-label {
+    color: var(--text-secondary);
+    font-size: 0.92em;
+}
+
+.hall-preview-stage {
+    text-align: center;
+    margin-bottom: 16px;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-light));
+    border-radius: 8px;
+    color: var(--cream);
+    font-weight: 600;
+    font-size: 0.9em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
