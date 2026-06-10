@@ -69,9 +69,9 @@ def get_popular_venues():
             Review.created_at >= one_year_ago
         ).scalar() or 0
 
-        sales_score = sales / max_sales if max_sales > 0 else 0
-        rating_score = avg_rating / 5 if avg_rating else 0
-        rating = (sales_score * 0.6 + rating_score * 0.4) * 100
+        sales_score_float = float(sales_score) if sales_score else 0
+        rating_score_float = float(rating_score) if rating_score else 0
+        rating = (sales_score_float * 0.6 + rating_score_float * 0.4) * 100
         rating = round(rating, 2)
 
         # Включаем все заведения с ненулевым рейтингом или хотя бы с событием
