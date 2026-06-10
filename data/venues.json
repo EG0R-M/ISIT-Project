@@ -1,7 +1,7 @@
 [
   {
     "name": "Кинотеатр 'Баргузин'",
-    "address": "ул. Байкальская, 107",
+    "address": "Иркутск, ул. Байкальская, 107",
     "city": "Иркутск",
     "image_url": "/static/images/venues/barguzin.avif",
     "halls": [
@@ -11,7 +11,7 @@
   },
   {
     "name": "Кинотеатр 'New Cinema'",
-    "address": "ул. Советская, 58/1, МТЦ «Новый»",
+    "address": "Иркутск, ул. Советская, 58/1, МТЦ «Новый»",
     "city": "Иркутск",
     "image_url": "/static/images/venues/novyy.avif",
     "halls": [
@@ -20,7 +20,7 @@
   },
   {
     "name": "Кинотеатр 'Киномакс'",
-    "address": "ул. Сергеева 3/5, ТРЦ “Сильвер Молл”",
+    "address": "Иркутск, ул. Сергеева 3/5, ТРЦ “Сильвер Молл”",
     "city": "Иркутск",
     "image_url": "/static/images/venues/kinomaks.avif",
     "halls": [
@@ -29,7 +29,7 @@
   },
   {
     "name": "Ледовый дворец 'Байкал'",
-    "address": "ул. Лермонтова, 249",
+    "address": "Иркутск, ул. Лермонтова, 249",
     "city": "Иркутск",
     "image_url": "/static/images/venues/ledoviy_baykal.avif",
     "halls": [
@@ -38,7 +38,7 @@
   },
   {
     "name": "ТЮЗ им. А. Вампилова",
-    "address": "ул. Ленина, 23",
+    "address": "Иркутск, ул. Ленина, 23",
     "city": "Иркутск",
     "image_url": "/static/images/venues/tyuz_vampilova.avif",
     "halls": [
@@ -47,7 +47,7 @@
   },
   {
     "name": "Драматический театр им. Н.П. Охлопкова",
-    "address": "ул. Карла Маркса, 14",
+    "address": "Иркутск, ул. Карла Маркса, 14",
     "city": "Иркутск",
     "image_url": "/static/images/venues/dramteatr_ohlopkova.avif",
     "halls": [
@@ -57,7 +57,7 @@
   },
   {
     "name": "Театр кукол «Аистёнок»",
-    "address": "ул. Байкальская, 32",
+    "address": "Иркутск, ул. Байкальская, 32",
     "city": "Иркутск",
     "image_url": "/static/images/venues/aistenok.avif",
     "halls": [
@@ -66,7 +66,7 @@
   },
   {
     "name": "Музыкальный театр им. Н.М. Загурского",
-    "address": "ул. Седова, 29",
+    "address": "Иркутск, ул. Седова, 29",
     "city": "Иркутск",
     "image_url": "/static/images/venues/muzteatr_zagurskogo.avif",
     "halls": [
@@ -75,7 +75,7 @@
   },
   {
     "name": "Рок-бар, бар-ресторан",
-    "address": "ул. Советская, 176Б",
+    "address": "Иркутск, ул. Советская, 176Б",
     "city": "Иркутск",
     "image_url": "/static/images/venues/rok_bar.avif",
     "halls": [
@@ -84,7 +84,7 @@
   },
   {
     "name": "Концерт-холл (ex. «Дикая лошадь»)",
-    "address": "ул. Якоби, 35",
+    "address": "Иркутск, ул. Якоби, 35",
     "city": "Иркутск",
     "image_url": "/static/images/venues/koncert_holl.avif",
     "halls": [
@@ -93,7 +93,7 @@
   },
   {
     "name": "Harat's Pub в 130-м квартале",
-    "address": "ул. Седова 2а",
+    "address": "Иркутск, ул. Седова 2а",
     "city": "Иркутск",
     "image_url": "/static/images/venues/harats_pub.avif",
     "halls": [
@@ -102,7 +102,7 @@
   },
   {
     "name": "Труд",
-    "address": "ул. Ленина, 48",
+    "address": "Иркутск, ул. Ленина, 48",
     "city": "Иркутск",
     "image_url": "/static/images/venues/trud.avif",
     "halls": [
@@ -111,7 +111,7 @@
   },
   {
     "name": "Площадь у памятника Александру Третьему",
-    "address": "бульвар Гагарина, набережная",
+    "address": "Иркутск, бульвар Гагарина, набережная",
     "city": "Иркутск",
     "image_url": "/static/images/venues/ploshad_tretiy.avif",
     "halls": [
@@ -120,7 +120,7 @@
   },
   {
     "name": "Дом ремесел",
-    "address": "ул. Франк-Каменецкого, 16б",
+    "address": "Иркутск, ул. Франк-Каменецкого, 16б",
     "city": "Иркутск",
     "image_url": "/static/images/venues/dom_remesel.avif",
     "halls": [
@@ -129,11 +129,12 @@
   },
   {
     "name": "Сквер Кирова",
-    "address": "ул. Сухэ-Батора",
+    "address": "Иркутск, ул. Сухэ-Батора",
     "city": "Иркутск",
     "image_url": "/static/images/venues/skver_kirova.avif",
     "halls": [
       { "name": "Открытая площадка", "rows": 0, "seats_per_row": 0 }
     ]
   }
+
 ]
